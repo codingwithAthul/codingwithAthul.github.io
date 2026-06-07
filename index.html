@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Athul Sasidharan — Data Scientist & Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Syne:wght@400;600;700&family=Karla:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #060a12;
+  --bg-card: #0d1321;
+  --bg-hover: #131c30;
+  --border: rgba(255,255,255,0.07);
+  --accent: #00d4a8;
+  --accent-dim: rgba(0,212,168,0.08);
+  --accent-border: rgba(0,212,168,0.28);
+  --blue: #5b8af7;
+  --blue-dim: rgba(91,138,247,0.1);
+  --text: #dde4f0;
+  --muted: #8592a6;
+  --faint: #3d4a5c;
+  --fd: 'Cormorant Garamond', serif;
+  --fh: 'Syne', sans-serif;
+  --fb: 'Karla', sans-serif;
+  --fm: 'JetBrains Mono', monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);font-size:16px;line-height:1.7;overflow-x:hidden}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:2px}
+a{color:inherit;text-decoration:none}
+
+/* NAV */
+nav{position:fixed;top:0;width:100%;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 3rem;background:rgba(6,10,18,0.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);transition:border-color 0.3s}
+.nav-logo{font-family:var(--fd);font-size:1.35rem;font-weight:600;letter-spacing:0.03em}
+.nav-logo em{color:var(--accent);font-style:normal}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{font-family:var(--fm);font-size:0.7rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s}
+.nav-links a:hover{color:var(--accent)}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;align-items:center;padding:8rem 3rem 5rem;position:relative;overflow:hidden}
+.grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(0,212,168,0.035) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,168,0.035) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
+.glow{position:absolute;width:700px;height:700px;background:radial-gradient(circle,rgba(0,212,168,0.07) 0%,transparent 65%);top:-150px;right:-150px;pointer-events:none}
+.hero-inner{max-width:900px;position:relative;z-index:1}
+.eyebrow{font-family:var(--fm);font-size:0.72rem;color:var(--accent);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:1.5rem;display:flex;align-items:center;gap:0.8rem}
+.eyebrow::before{content:'';display:inline-block;width:2rem;height:1px;background:var(--accent)}
+h1.name{font-family:var(--fd);font-size:clamp(3.5rem,8vw,6.5rem);font-weight:700;line-height:1.04;letter-spacing:-0.02em;margin-bottom:1.5rem}
+h1.name .dot{color:var(--accent)}
+.tagline{font-size:1.1rem;color:var(--muted);max-width:600px;line-height:1.85;margin-bottom:2.5rem;font-weight:300}
+.tagline strong{color:var(--text);font-weight:500}
+.pills{display:flex;flex-wrap:wrap;gap:0.75rem;margin-bottom:3rem}
+.pill{display:inline-flex;align-items:center;gap:0.45rem;padding:0.45rem 1rem;border:1px solid var(--border);border-radius:2rem;font-family:var(--fm);font-size:0.7rem;color:var(--muted);background:var(--bg-card);transition:all 0.25s}
+.pill:hover{border-color:var(--accent-border);color:var(--accent);background:var(--accent-dim)}
+.pill svg{width:12px;height:12px;opacity:0.8;flex-shrink:0}
+.cta{display:flex;gap:0.85rem}
+.btn{padding:0.8rem 1.9rem;border-radius:0.25rem;font-family:var(--fh);font-size:0.82rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;transition:all 0.2s;display:inline-block}
+.btn-fill{background:var(--accent);color:#060a12}
+.btn-fill:hover{background:#00f0be;transform:translateY(-2px)}
+.btn-outline{border:1px solid var(--border);color:var(--text)}
+.btn-outline:hover{border-color:var(--accent-border);color:var(--accent)}
+.scroll-hint{position:absolute;bottom:2.5rem;left:3rem;display:flex;align-items:center;gap:0.75rem;font-family:var(--fm);font-size:0.65rem;color:var(--faint);letter-spacing:0.12em}
+.scroll-line{width:1px;height:2.5rem;background:linear-gradient(to bottom,var(--faint),transparent);animation:pulse 2.2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:0.3}50%{opacity:0.9}}
+
+/* SECTION */
+.wrap{max-width:1140px;margin:0 auto;padding:6rem 3rem}
+.sec-head{display:flex;align-items:center;gap:1.25rem;margin-bottom:3.5rem}
+.sec-num{font-family:var(--fm);font-size:0.68rem;color:var(--accent);letter-spacing:0.12em}
+.sec-title{font-family:var(--fh);font-size:1.8rem;font-weight:700;letter-spacing:-0.01em;white-space:nowrap}
+.sec-rule{flex:1;height:1px;background:var(--border)}
+
+/* SKILLS */
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.25rem}
+.skill-card{background:var(--bg-card);border:1px solid var(--border);border-radius:0.5rem;padding:1.4rem;transition:all 0.3s}
+.skill-card:hover{border-color:var(--accent-border);background:var(--bg-hover)}
+.skill-label{font-family:var(--fm);font-size:0.65rem;color:var(--accent);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:1rem}
+.tags{display:flex;flex-wrap:wrap;gap:0.4rem}
+.tag{font-family:var(--fm);font-size:0.68rem;color:var(--muted);background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:0.2rem;padding:0.2rem 0.55rem}
+
+/* TIMELINE */
+.timeline{padding-left:2rem;position:relative}
+.timeline::before{content:'';position:absolute;left:0;top:0.5rem;bottom:0;width:1px;background:var(--border)}
+.tl-item{position:relative;padding-left:2rem;margin-bottom:3.5rem}
+.tl-dot{position:absolute;left:-2.45rem;top:0.5rem;width:10px;height:10px;border-radius:50%;background:var(--accent);border:2px solid var(--bg);box-shadow:0 0 0 1px var(--accent)}
+.tl-meta{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.35rem}
+.tl-role{font-family:var(--fh);font-size:1rem;font-weight:600}
+.tl-date{font-family:var(--fm);font-size:0.68rem;color:var(--faint);letter-spacing:0.08em}
+.tl-co{font-size:0.85rem;color:var(--accent);font-weight:500;margin-bottom:0.9rem}
+.tl-list{list-style:none;display:flex;flex-direction:column;gap:0.55rem}
+.tl-list li{font-size:0.88rem;color:var(--muted);padding-left:1.3rem;position:relative;line-height:1.75}
+.tl-list li::before{content:'→';position:absolute;left:0;color:var(--accent);font-size:0.72rem;top:0.15em}
+.tl-list strong{color:var(--accent)}
+
+/* PROJECTS */
+.proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.25rem}
+.proj-card{background:var(--bg-card);border:1px solid var(--border);border-radius:0.5rem;padding:1.75rem;display:flex;flex-direction:column;gap:0.9rem;transition:all 0.3s}
+.proj-card:hover{border-color:var(--accent-border);transform:translateY(-3px)}
+.proj-top{display:flex;justify-content:space-between;align-items:center}
+.proj-ico{width:2.4rem;height:2.4rem;background:var(--accent-dim);border:1px solid var(--accent-border);border-radius:0.4rem;display:flex;align-items:center;justify-content:center;font-size:1.05rem}
+.proj-when{font-family:var(--fm);font-size:0.65rem;color:var(--faint)}
+.proj-title{font-family:var(--fh);font-size:0.95rem;font-weight:600}
+.proj-org{font-size:0.78rem;color:var(--accent);font-weight:500;margin-top:0.15rem}
+.proj-desc{font-size:0.86rem;color:var(--muted);line-height:1.75;flex:1}
+.proj-tags{display:flex;flex-wrap:wrap;gap:0.35rem}
+.proj-tag{font-family:var(--fm);font-size:0.64rem;color:var(--blue);background:var(--blue-dim);border-radius:0.2rem;padding:0.18rem 0.5rem}
+
+/* EDUCATION */
+.edu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem}
+.edu-card{background:var(--bg-card);border:1px solid var(--border);border-radius:0.5rem;padding:1.4rem;transition:all 0.3s}
+.edu-card:hover{border-color:rgba(91,138,247,0.3)}
+.edu-deg{font-family:var(--fh);font-size:0.92rem;font-weight:600;margin-bottom:0.35rem}
+.edu-school{font-size:0.82rem;color:var(--blue);font-weight:500;margin-bottom:0.6rem}
+.edu-foot{display:flex;justify-content:space-between;font-family:var(--fm);font-size:0.66rem;color:var(--faint)}
+.edu-foot .honor{color:var(--accent)}
+
+/* LEADERSHIP */
+.lead-card{background:var(--bg-card);border:1px solid var(--border);border-left:2px solid var(--accent);border-radius:0.5rem;padding:2rem}
+.lead-title{font-family:var(--fh);font-size:0.95rem;font-weight:600;margin-bottom:0.75rem}
+.lead-desc{font-size:0.88rem;color:var(--muted);line-height:1.75}
+.chips{display:flex;gap:0.65rem;flex-wrap:wrap;margin-top:1rem}
+.chip{font-family:var(--fm);font-size:0.68rem;color:var(--accent);background:var(--accent-dim);border:1px solid var(--accent-border);border-radius:2rem;padding:0.22rem 0.75rem}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);max-width:1140px;margin:0 auto;padding:2.5rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.foot-copy{font-family:var(--fm);font-size:0.68rem;color:var(--faint)}
+.foot-links{display:flex;gap:1.5rem}
+.foot-links a{font-family:var(--fm);font-size:0.68rem;color:var(--faint);transition:color 0.2s}
+.foot-links a:hover{color:var(--accent)}
+
+/* ANIMATE */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity 0.65s ease,transform 0.65s ease}
+.reveal.in{opacity:1;transform:none}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  nav{padding:1rem 1.5rem}
+  .nav-links{display:none}
+  #hero{padding:6rem 1.5rem 4rem}
+  .wrap{padding:4rem 1.5rem}
+  footer{padding:2rem 1.5rem}
+  h1.name{font-size:3rem}
+  .scroll-hint{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Athul<em>.</em></div>
+  <ul class="nav-links">
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="https://github.com/codingwithAthul" target="_blank">GitHub ↗</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div id="hero">
+  <div class="grid-bg"></div>
+  <div class="glow"></div>
+  <div class="hero-inner">
+    <div class="eyebrow">Open to opportunities · Vancouver, BC</div>
+    <h1 class="name">Athul<br>Sasidharan<span class="dot">.</span></h1>
+    <p class="tagline">
+      Data Scientist & Engineer bridging <strong>analytical depth</strong> with <strong>business impact</strong>.
+      MDS candidate at UBC with 5+ years across banking, consulting, and healthcare analytics.
+    </p>
+    <div class="pills">
+      <a href="mailto:athulchira@gmail.com" class="pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+        athulchira@gmail.com
+      </a>
+      <a href="tel:+17788830420" class="pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        +1 (778) 883-0420
+      </a>
+      <a href="https://github.com/codingwithAthul" target="_blank" class="pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        GitHub
+      </a>
+      <a href="https://linkedin.com/in/YOUR_LINKEDIN" target="_blank" class="pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+    </div>
+    <div class="cta">
+      <a href="https://github.com/codingwithAthul" target="_blank" class="btn btn-fill">View GitHub</a>
+      <a href="mailto:athulchira@gmail.com" class="btn btn-outline">Get in Touch</a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    <span>SCROLL</span>
+  </div>
+</div>
+
+<!-- SKILLS -->
+<div class="wrap" id="skills">
+  <div class="sec-head reveal">
+    <span class="sec-num">01</span>
+    <h2 class="sec-title">Technical Skills</h2>
+    <div class="sec-rule"></div>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-card reveal">
+      <div class="skill-label">Languages & Querying</div>
+      <div class="tags">
+        <span class="tag">SQL</span><span class="tag">Python</span><span class="tag">R</span><span class="tag">Bash</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-label">ML & AI</div>
+      <div class="tags">
+        <span class="tag">Scikit-learn</span><span class="tag">Pandas</span><span class="tag">NumPy</span>
+        <span class="tag">Statistical Modeling</span><span class="tag">Prompt Engineering</span><span class="tag">RAG</span><span class="tag">LLMs</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-label">Data Engineering</div>
+      <div class="tags">
+        <span class="tag">Data Pipelines</span><span class="tag">Informatica</span>
+        <span class="tag">Data Warehouse Design</span><span class="tag">Workflow Automation</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-label">Databases, BI & Tools</div>
+      <div class="tags">
+        <span class="tag">Power BI</span><span class="tag">Oracle</span><span class="tag">PostgreSQL</span>
+        <span class="tag">Git</span><span class="tag">Jupyter</span><span class="tag">HuggingFace</span><span class="tag">Groq</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPERIENCE -->
+<div class="wrap" id="experience">
+  <div class="sec-head reveal">
+    <span class="sec-num">02</span>
+    <h2 class="sec-title">Experience</h2>
+    <div class="sec-rule"></div>
+  </div>
+  <div class="timeline">
+    <div class="tl-item reveal">
+      <div class="tl-dot"></div>
+      <div class="tl-meta">
+        <div class="tl-role">Data Engineer — Deputy Manager</div>
+        <div class="tl-date">Jul 2022 – Feb 2024</div>
+      </div>
+      <div class="tl-co">Axis Bank Ltd · Bangalore, India</div>
+      <ul class="tl-list">
+        <li>Engineered scalable data pipelines using Oracle, PLSQL & Informatica to streamline dataset ingestion and accelerate BI performance across <strong>5+ teams</strong> in a large-scale banking environment, while enforcing regulatory compliance.</li>
+        <li>Drove end-to-end unit testing and production deployment in Blaze/TRAID, resolving critical issues pre-release to ensure stability and minimize downtime across live data engineering environments.</li>
+        <li>Partnered with cross-functional stakeholders to translate complex business requirements into scalable data solutions, improving data model performance and establishing enterprise-grade documentation standards.</li>
+      </ul>
+    </div>
+    <div class="tl-item reveal">
+      <div class="tl-dot"></div>
+      <div class="tl-meta">
+        <div class="tl-role">Business Consultant</div>
+        <div class="tl-date">May 2020 – Apr 2022</div>
+      </div>
+      <div class="tl-co">Boilex Metals Inc · Kerala, India</div>
+      <ul class="tl-list">
+        <li>Designed and implemented data-driven financial strategies and a new product sales model, applying statistical modeling to achieve <strong>5× revenue growth</strong> and save up to <strong>30%</strong> of annual operational turnover.</li>
+        <li>Streamlined finance and administration through workflow automation and automated reporting pipelines, leading 2-year market research and competitive analysis enhancing executive decision-making.</li>
+      </ul>
+    </div>
+    <div class="tl-item reveal">
+      <div class="tl-dot"></div>
+      <div class="tl-meta">
+        <div class="tl-role">HR Intern → Team Lead</div>
+        <div class="tl-date">Jun – Aug 2021</div>
+      </div>
+      <div class="tl-co">GAO Tek Inc · New York, US (Remote)</div>
+      <ul class="tl-list">
+        <li>Led interviews and inductions; promoted to leadership role within one month, overseeing team coordination and task delegation.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<div class="wrap" id="projects">
+  <div class="sec-head reveal">
+    <span class="sec-num">03</span>
+    <h2 class="sec-title">Projects</h2>
+    <div class="sec-rule"></div>
+  </div>
+  <div class="proj-grid">
+    <div class="proj-card reveal">
+      <div class="proj-top">
+        <div class="proj-ico">⚕️</div>
+        <div class="proj-when">May 2026</div>
+      </div>
+      <div>
+        <div class="proj-title">Electronic Testing System Migration</div>
+        <div class="proj-org">BC Children's Hospital</div>
+      </div>
+      <p class="proj-desc">Architected end-to-end data pipelines in R and Power BI to validate a transition from paper-based to electronic testing, delivering stakeholder-facing insights via a dashboard that quantified error reduction and reinforced system integrity.</p>
+      <div class="proj-tags">
+        <span class="proj-tag">R</span><span class="proj-tag">Power BI</span><span class="proj-tag">Data Pipelines</span><span class="proj-tag">Healthcare Analytics</span>
+      </div>
+    </div>
+    <div class="proj-card reveal">
+      <div class="proj-top">
+        <div class="proj-ico">🛒</div>
+        <div class="proj-when">Apr 2026</div>
+      </div>
+      <div>
+        <div class="proj-title">Smart Product Review Search</div>
+        <div class="proj-org">Amazon Shopping</div>
+      </div>
+      <p class="proj-desc">Built an AI-powered shopping assistant with live pricing that answers customer product queries using 16K+ Amazon reviews, combining keyword and semantic search with an LLM to deliver grounded, source-cited recommendations.</p>
+      <div class="proj-tags">
+        <span class="proj-tag">RAG</span><span class="proj-tag">LLM</span><span class="proj-tag">BM25</span><span class="proj-tag">Semantic Search</span><span class="proj-tag">Streamlit</span>
+      </div>
+    </div>
+    <div class="proj-card reveal">
+      <div class="proj-top">
+        <div class="proj-ico">🌐</div>
+        <div class="proj-when">Dec 2024</div>
+      </div>
+      <div>
+        <div class="proj-title">Global Business Strategic Plan</div>
+        <div class="proj-org">Uber</div>
+      </div>
+      <p class="proj-desc">Performed end-to-end market analysis for a global Uber strategy using PESTEEL, TOWS, GE-McKinsey, and Porter's Five Forces, producing a cost-innovation strategy with multi-stakeholder decision metrics across 12+ segments.</p>
+      <div class="proj-tags">
+        <span class="proj-tag">Strategic Analysis</span><span class="proj-tag">Market Research</span><span class="proj-tag">Data Modeling</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EDUCATION -->
+<div class="wrap" id="education">
+  <div class="sec-head reveal">
+    <span class="sec-num">04</span>
+    <h2 class="sec-title">Education</h2>
+    <div class="sec-rule"></div>
+  </div>
+  <div class="edu-grid">
+    <div class="edu-card reveal">
+      <div class="edu-deg">Master of Data Science</div>
+      <div class="edu-school">University of British Columbia · Vancouver</div>
+      <div class="edu-foot">
+        <span>Sept 2025 – June 2026</span>
+      </div>
+    </div>
+    <div class="edu-card reveal">
+      <div class="edu-deg">Graduate Certificate, Global Leadership</div>
+      <div class="edu-school">BCIT · Vancouver</div>
+      <div class="edu-foot">
+        <span>Sept 2024 – May 2025</span>
+        <span class="honor">Distinction</span>
+      </div>
+    </div>
+    <div class="edu-card reveal">
+      <div class="edu-deg">B.Tech, Mechanical Engineering</div>
+      <div class="edu-school">NIT Tiruchirappalli · India</div>
+      <div class="edu-foot">
+        <span>2018 – 2022</span>
+        <span class="honor">First Class Honours</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LEADERSHIP -->
+<div class="wrap" id="leadership" style="padding-top:0">
+  <div class="sec-head reveal">
+    <span class="sec-num">05</span>
+    <h2 class="sec-title">Leadership</h2>
+    <div class="sec-rule"></div>
+  </div>
+  <div class="lead-card reveal">
+    <div class="lead-title">Organizing Committee Head — Sportsfete, NSS & Aaveg · NITT (2018–20)</div>
+    <p class="lead-desc">Directed end-to-end logistics for NITT's largest student-run events. Procured government and private funding, managed community sustainability initiatives, budgeting, stakeholder negotiations, and on-site issue resolution.</p>
+    <div class="chips">
+      <span class="chip">75+ events</span>
+      <span class="chip">14 departments</span>
+      <span class="chip">13,000+ participants</span>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="foot-copy">© 2026 Athul Sasidharan</div>
+  <div class="foot-links">
+    <a href="mailto:athulchira@gmail.com">Email</a>
+    <a href="https://github.com/codingwithAthul" target="_blank">GitHub</a>
+    <a href="https://linkedin.com/in/YOUR_LINKEDIN" target="_blank">LinkedIn</a>
+  </div>
+</footer>
+
+<script>
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('in'), i * 90);
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+const nav = document.querySelector('nav');
+window.addEventListener('scroll', () => {
+  nav.style.borderBottomColor = window.scrollY > 60
+    ? 'rgba(0,212,168,0.15)' : 'rgba(255,255,255,0.07)';
+});
+</script>
+</body>
+</html>

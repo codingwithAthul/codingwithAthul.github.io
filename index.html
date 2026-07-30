@@ -655,3 +655,64 @@ async function buildScene(){
   sun.position.set(-60, 70, 40);
   scene.add(sun);
 
+  /* -- the two carve lines: precomputed, revealed with setDrawRange -- */
+  const N = 900;
+  const pathA = [], pathB = [];
+  for (let i = 0; i < N; i++){
+    const z = -(i / (N - 1)) * RUN - 8;
+    const xa = Math.sin(z * 0.026) * 13.5;
+    const xb = Math.sin(z * 0.026 + 1.05) * 12.0 + 3.5;
+    pathA.push(new THREE.Vector3(xa, H(xa, z) + 0.28, z));
+    pathB.push(new THREE.Vector3(xb, H(xb, z) + 0.28, z));
+  }
+  function trail(path, hex){
+    const g = new THREE.BufferGeometry().setFromPoints(path);
+    g.setDrawRange(0, 1);
+    const l = new THREE.Line(g, new THREE.LineBasicMaterial({
+      color:hex, transparent:true, opacity:0.9
+    }));
+    scene.add(l);
+    return l;
+  }
+  const trailA = trail(pathA, 0xFF6A3D);
+  const trailB = trail(pathB, 0xF5C453);
+
+  /* -- riders: board + body, abstract. No characters, no IP. -- */
+  function rider(hex){
+    const g = new THREE.Group();
+    const board = new THREE.Mesh(
+      new THREE.BoxGeometry(0.85, 0.16, 3.0),
+      new THREE.MeshLambertMaterial({color:hex})
+    );
+    board.position.y = 0.1;
+    const body = new THREE.Mesh(
+      new THREE.SphereGeometry(0.5, 14, 12),
+      new THREE.MeshLambertMaterial({color:0x17282E})
+    );
+    body.position.y = 0.95;
+    body.scale.set(0.85, 1.35, 0.85);
+    g.add(board, body);
+    scene.add(g);
+    return g;
+  }
+  const riderA = rider(0xFF6A3D);
+  const riderB = rider(0xF5C453);
+
+  /* -- drifting snow -- */
+  const SNOWFLAKES = 950;
+  const sp = new Float32Array(SNOWFLAKES * 3);
+  for (let i = 0; i < SNOWFLAKES; i++){
+    sp[i*3]   = (Math.random() - 0.5) * 150;
+    sp[i*3+1] = Math.random() * 60;
+    sp[i*3+2] = (Math.random() - 0.5) * 280;
+  }
+  const snowGeo = new THREE.BufferGeometry();
+  snowGeo.setAttribute('position', new THREE.BufferAttribute(sp, 3));
+  const snow = new THREE.Points(snowGeo, new THREE.PointsMaterial({
+    color:0xFFFFFF, size:0.42, transparent:true, opacity:0.72, sizeAttenuation:true, depthWrite:false
+  }));
+  scene.add(snow);
+
+  /* -- loop -- */
+  const camTarget = new THREE.Vector3();
+  let running = true, t0 = performance.now();

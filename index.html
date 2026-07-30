@@ -310,3 +310,55 @@ footer{padding:30px var(--gut) 40px;border-top:1px solid var(--hair);
     </div>
     <div class="scrollcue" aria-hidden="true"><i></i> Scroll to descend</div>
   </section>
+
+  <!-- ================= WORK ================= -->
+  <section id="work" class="wrap">
+    <p class="eyebrow rv">Selected work</p>
+    <h2 class="rv" data-d="1">Seven things I shipped, and what each one changed.</h2>
+    <p class="lede rv" data-d="2">Every card opens the repo. Nothing here is a course
+      exercise dressed up &mdash; each one had a partner, a user, or a deadline attached.</p>
+
+    <div class="grid">
+
+      <!-- TODO: replace href with the CodeIQ repository URL -->
+      <a class="card rv" data-d="1" href="https://github.com/codingwithAthul" target="_blank" rel="noopener" data-todo="CodeIQ repo URL">
+        <span class="top"><span>Jul 2026 &middot; Hackathon</span><span class="arrow">&#8599;</span></span>
+        <h3>CodeIQ &mdash; codebase knowledge graph</h3>
+        <p>Ask a question in plain English, get an answer grounded in the actual call
+          graph of a repository. I owned graph construction, the evaluation harness, and
+          per-answer confidence scoring.</p>
+        <div class="tags"><i>ts-morph</i><i>NetworkX</i><i>ChromaDB</i><i>LangChain</i><i>Groq</i><i>Shiny</i></div>
+        <span class="metric"><b>93%</b> hit rate on the benchmark question set</span>
+      </a>
+
+      <!-- no repo link by design: paediatric health data. Do not publish. -->
+      <span class="card locked rv" data-d="2">
+        <span class="top"><span>May 2026 &middot; MDS Capstone</span><span class="arrow">&#8853;</span></span>
+        <h3>Specimen mislabelling audit &mdash; BC Children&#8217;s Hospital</h3>
+        <p>Two independent detection pipelines over a clinical SQL Server warehouse,
+          reconciled at accession level, to measure whether moving from paper to electronic
+          requisitions actually reduced labelling error. Shipped as a Shiny dashboard plus
+          a partner-facing report.</p>
+        <div class="tags"><i>R</i><i>Quarto</i><i>dbplyr</i><i>SQL Server</i><i>ggplot2</i></div>
+        <span class="metric"><b>2</b> pipelines cross-validated &middot; report on request</span>
+      </span>
+
+      <a class="card rv" data-d="3" href="https://github.com/UBC-MDS/geospatial-toolkit" target="_blank" rel="noopener">
+        <span class="top"><span>2026 &middot; Python package</span><span class="arrow">&#8599;</span></span>
+        <h3>geospatial-toolkit</h3>
+        <p>A lightweight package that standardises the geospatial operations everyone
+          rewrites from scratch &mdash; projections, distance, spatial joins. Packaged, tested,
+          documented, published.</p>
+        <div class="tags"><i>Python</i><i>GeoPandas</i><i>Poetry</i><i>pytest</i><i>CI</i></div>
+        <span class="metric"><b>DSCI 524</b> Group 12 &middot; open source</span>
+      </a>
+
+      <a class="card rv" data-d="4" href="https://github.com/UBC-MDS/DSCI-532_2026_3_vancouver_park_dashboard" target="_blank" rel="noopener">
+        <span class="top"><span>2026 &middot; Deployed dashboard</span><span class="arrow">&#8599;</span></span>
+        <h3>Vancouver Park Finder</h3>
+        <p>A public-facing dashboard for searching Vancouver parks against whatever a
+          person actually cares about &mdash; washrooms, dog areas, playgrounds, distance.
+          Built for residents, not for markers.</p>
+        <div class="tags"><i>Python</i><i>Dash</i><i>Plotly</i><i>Altair</i></div>
+        <span class="metric"><b>240+</b> parks, filterable in one screen</span>
+      </a>

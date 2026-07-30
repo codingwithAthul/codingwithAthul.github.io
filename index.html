@@ -568,3 +568,44 @@ if (reduce || !('IntersectionObserver' in window)){
   targets.forEach(t => io.observe(t));
 }
 
+/* ---------- sky warms as you descend into the alpenglow ---------- */
+const sky = document.getElementById('sky');
+if (!reduce){
+  let raf = null;
+  addEventListener('scroll', () => {
+    if (raf) return;
+    raf = requestAnimationFrame(() => {
+      sky.style.filter = `saturate(${(1 + progress * 0.32).toFixed(3)}) brightness(${(1 - progress * 0.04).toFixed(3)})`;
+      raf = null;
+    });
+  }, {passive:true});
+}
+
+if (reduce || narrow){
+  fallback.classList.add('on');
+} else {
+  buildScene().catch(() => fallback.classList.add('on'));
+}
+
+async function buildScene(){
+  const THREE = await import('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js');
+
+  const canvas = document.getElementById('scene');
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true, powerPreference:'high-performance'});
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+  renderer.setSize(innerWidth, innerHeight, false);
+
+  const scene = new THREE.Scene();
+  const SNOW = new THREE.Color(0xEDF1F5);
+  scene.fog = new THREE.Fog(SNOW, 70, 400);
+
+  const camera = new THREE.PerspectiveCamera(52, innerWidth / innerHeight, 0.5, 700);
+
+  /* -- terrain height field. Riders and camera both sample this. -- */
+  const RUN = 1000;                       // total run length in world units
+  const H = (x, z) =>
+      Math.pow(Math.abs(x) / 46, 2.3) * 16      // valley walls
+    + Math.sin(z * 0.045) * 2.0                 // rollers
+    + Math.cos(z * 0.017) * 3.6                 // long undulation
+    + Math.sin(x * 0.09 + z * 0.031) * 1.1      // surface grain
+    + z * 0.155;                                // the descent (z goes negative)

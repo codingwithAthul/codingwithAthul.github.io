@@ -518,3 +518,53 @@ footer{padding:30px var(--gut) 40px;border-top:1px solid var(--hair);
     </div>
   </section>
 </main>
+
+<footer>
+  <span>&copy; 2026 Athul Sasidharan</span>
+  <span>Vancouver &middot; 49.28&deg;N</span>
+  <span>Built by hand. Ride together.</span>
+</footer>
+
+<script type="module">
+/* ============================================================
+   THE CARVE — signature element.
+   Two riders descend a ridgeline, tracks persisting behind them.
+   Scroll position drives altitude. Original geometry only.
+   Guardrails: off below 820px, off for reduced-motion, paused
+   when hidden, DPR capped, no textures, no post-processing.
+   ============================================================ */
+
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const narrow = innerWidth < 820;
+const fallback = document.getElementById('ridgeFallback');
+
+/* ---------- altimeter (runs regardless of WebGL) ---------- */
+const altVal = document.getElementById('altVal');
+const altFill = document.getElementById('altFill');
+const altDot = document.getElementById('altDot');
+const PEAK = 2540;
+let progress = 0, smooth = 0;
+
+function readProgress(){
+  const max = document.documentElement.scrollHeight - innerHeight;
+  progress = max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
+  const m = Math.round(PEAK * (1 - progress));
+  altVal.textContent = m.toLocaleString('en-CA') + ' m';
+  altFill.style.height = (progress * 100).toFixed(2) + '%';
+  altDot.style.top = (progress * 100).toFixed(2) + '%';
+}
+addEventListener('scroll', readProgress, {passive:true});
+addEventListener('resize', readProgress);
+readProgress();
+
+/* ---------- reveals ---------- */
+const targets = document.querySelectorAll('.rv:not(.in)');
+if (reduce || !('IntersectionObserver' in window)){
+  targets.forEach(t => t.classList.add('in'));
+} else {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {rootMargin:'0px 0px -12% 0px', threshold:0.08});
+  targets.forEach(t => io.observe(t));
+}
+

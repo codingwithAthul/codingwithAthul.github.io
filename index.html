@@ -473,6 +473,7 @@ footer{padding:26px var(--gut) 38px;border-top:1px solid var(--line);display:fle
   var CAM_A = 10, CAM_B = 98, GOAL_P = 0.92, PAN = 0.9, HORIZON = 0.48;
   var BR = 0.38;                       /* ball radius, stylised for visibility */
   var INK = '#16232A', ATTACK = '#E8552F', DEFEND = 'rgba(84,100,116,.92)';
+  var GK_A = '#2F8C5C', GK_D = '#7C4FB0';   /* keepers wear their own colours */
 
   var KF = [
     [0.000,   0,   6,  0, 0], [0.040, -14,  14,  1, 0], [0.080,  -4,  22,  3, 0],
@@ -513,6 +514,26 @@ footer{padding:26px var(--gut) 38px;border-top:1px solid var(--line);display:fle
     return [w[0][1], w[0][2]];
   }
 
+  /* a keyframe whose receiver equals the previous receiver is a carry: the ball
+     travels at that player's feet with touches instead of pass easing */
+  function dribbleSeg(i){ return KF[i][3] >= 0 && KF[i][3] === KF[i+1][3]; }
+  function dribblePos(i, t){
+    var r = KF[i][3], p = KF[i][0] + (KF[i+1][0]-KF[i][0])*t;
+    var pos = track(ATK[r], p);
+    var c0 = track(ATK[r], clamp(p-0.004,0,1)), c1 = track(ATK[r], clamp(p+0.004,0,1));
+    var vx = c1[0]-c0[0], vy = c1[1]-c0[1], vm = Math.hypot(vx,vy) || 1;
+    var ux = vx/vm, uy = vy/vm;
+    var env = Math.sin(Math.PI*t);
+    var ahead = (0.35 + 0.5*(0.5+0.5*Math.sin(t*Math.PI*6 - 1.2))) * env;  /* touch-and-chase */
+    var side = 0.9 * Math.sin(t*Math.PI*3) * env;                           /* cuts off either foot */
+    return [pos[0] + ux*ahead - uy*side, pos[1] + uy*ahead + ux*side];
+  }
+  function inDribble(p){
+    for (var i=0;i<KF.length-1;i++)
+      if (p >= KF[i][0] && p < KF[i+1][0]) return dribbleSeg(i);
+    return false;
+  }
+
   function ballAt(p){
     if (p <= 0) return [KF[0][1], KF[0][2], 0];
     var last = KF[KF.length-1];
@@ -520,8 +541,15 @@ footer{padding:26px var(--gut) 38px;border-top:1px solid var(--line);display:fle
     for (var i=0;i<KF.length-1;i++){
       if (p >= KF[i][0] && p <= KF[i+1][0]){
         var t = (p - KF[i][0]) / (KF[i+1][0] - KF[i][0]);
+        if (dribbleSeg(i)){ var dp = dribblePos(i, t); return [dp[0], dp[1], 0]; }
         var e = 1 - Math.pow(1-t, 2.2);
-        var z = Math.sin(Math.PI*t) * (KF[i+1][4] ? 7 : 0);
+        /* the finish: the cross stays up for the volley, the strike dips under the bar,
+           then the ball drops to the net floor. Tied to the 0.80 / 0.87 / 0.92 keyframes. */
+        var s0 = KF[i][0], z;
+        if (s0 === 0.80)      z = Math.sin(Math.PI*t)*6.2 + 1.6*t;
+        else if (s0 === 0.87) z = 1.6 - 0.7*t + Math.sin(Math.PI*t)*0.5;
+        else if (s0 === 0.92) z = 0.9*(1-t)*(1-t);
+        else z = Math.sin(Math.PI*t) * (KF[i+1][4] ? 7 : 0);
         return [KF[i][1]+(KF[i+1][1]-KF[i][1])*e, KF[i][2]+(KF[i+1][2]-KF[i][2])*e, z];
       }
     }
@@ -557,7 +585,8 @@ footer{padding:26px var(--gut) 38px;border-top:1px solid var(--line);display:fle
   KF.forEach(function(k){
     if (k[3] >= 0) (EVENTS[k[3]] = EVENTS[k[3]] || []).push(k[0]);
   });
-  var FINISHER = 10, FIN_A = 0.895, FIN_B = 0.945;
+  var FINISHER = 10, FIN_A = 0.84, FIN_B = 0.90;   /* contact at p=0.87, when the shot leaves */
+  var DIVE_A = 0.875, DIVE_B = 0.925;              /* the keeper's dive across the shot */
 
   var cv = document.getElementById('pitch'), ctx = cv.getContext('2d');
   var W=0, H=0, FOC=1180, CX=0, CYPX=0, CAMY=0, CAMX=0;
@@ -671,14 +700,47 @@ footer{padding:26px var(--gut) 38px;border-top:1px solid var(--line);display:fle
     }
 
     if (pose === 2){
-      /* overhead kick: airborne, body laid back, leg swung high at the goal */
-      var hh = Math.sin(clamp(poseT,0,1)*Math.PI) * 0.8;
-      limb([[-0.26, 0.95+hh],[0.08, 1.02+hh]], 0.30);                 /* torso */
-      head(-0.40, 0.80+hh, 0.12);
-      limb([[0.08, 1.02+hh],[0.35, 1.32+hh],[0.62, 1.66+hh]], 0.15);  /* kicking leg */
-      limb([[0.08, 1.02+hh],[0.20, 0.82+hh],[0.06, 0.58+hh]], 0.15);  /* trailing leg */
-      limb([[-0.24, 0.94+hh],[-0.52, 0.52+hh]], 0.10);                /* arms to ground */
-      limb([[-0.24, 0.94+hh],[-0.10, 0.50+hh]], 0.10);
+      /* bicycle kick: jump, lay back, scissor, strike at poseT=0.5, land to a crouch */
+      var T = clamp(poseT, 0, 1);
+      var hh = Math.sin(T*Math.PI) * 0.9;
+      var sw = clamp((T - 0.12)/0.55, 0, 1); sw = sw*sw*(3-2*sw);     /* swing into the strike */
+      var rec = clamp((T - 0.72)/0.28, 0, 1); rec = rec*rec*(3-2*rec);/* landing recovery */
+      var hx = -0.05, hy = 0.72 + hh;
+      var th = 1.5 + 1.5*sw - 1.35*rec;                               /* torso lays back */
+      var sx2 = hx + Math.cos(th)*0.58, sy2 = hy + Math.sin(th)*0.58;
+      var fk = -1.1 + 2.25*sw - 2.2*rec;                              /* kicking leg sweeps overhead */
+      var kb = 0.5*(1 - sw);
+      var ft = -0.25 - 1.35*sw + 0.35*rec;                            /* scissor leg counter-swings */
+      limb([[hx,hy],[hx+Math.cos(fk+kb)*0.45, hy+Math.sin(fk+kb)*0.45],[hx+Math.cos(fk)*0.85, hy+Math.sin(fk)*0.85]], 0.15);
+      limb([[hx,hy],[hx+Math.cos(ft-0.3)*0.4, hy+Math.sin(ft-0.3)*0.4],[hx+Math.cos(ft)*0.72, hy+Math.sin(ft)*0.72]], 0.15);
+      limb([[hx,hy],[sx2,sy2]], 0.30);
+      head(sx2 + Math.cos(th)*0.20, sy2 + Math.sin(th)*0.20, 0.12);
+      limb([[sx2,sy2],[sx2-0.10, sy2-0.42]], 0.10);                   /* arms brace for the ground */
+      limb([[sx2,sy2],[sx2-0.34, sy2-0.28]], 0.10);
+    } else if (pose === 3){
+      /* jockeying: crouched, knees wide, arms out, small bounce on the toes */
+      var jb = 0.03*Math.sin(dist*6);
+      var sprd = 0.30 + 0.14*clamp(poseT,0,1);
+      limb([[0,0.76+jb],[-0.26,0.40+jb],[-0.38,0]], 0.15);
+      limb([[0,0.76+jb],[ 0.24,0.38+jb],[ 0.36,0]], 0.15);
+      limb([[0,0.74+jb],[0.10,1.28+jb]], 0.30);
+      head(0.15,1.48+jb,0.12);
+      limb([[0.08,1.22+jb],[ 0.30+sprd,1.00+jb]], 0.10);
+      limb([[0.08,1.22+jb],[-0.26-sprd,1.04+jb]], 0.10);
+    } else if (pose === 4){
+      /* the dive: launch off the near leg, lay out full stretch, come down empty-handed */
+      var Td = clamp(poseT,0,1);
+      var ex = clamp(Td/0.55, 0, 1); ex = ex*ex*(3-2*ex);             /* extension */
+      var ha = Math.sin(Math.PI*Math.min(Td/0.85,1)) * 0.55;          /* up, then down */
+      var ba = 1.25 - 1.15*ex;                                        /* body angle above horizontal */
+      var hipy = 0.22 + ha + 0.35*(1-ex);
+      var hx4 = -0.15, sx4 = hx4+Math.cos(ba)*0.60, sy4 = hipy+Math.sin(ba)*0.60;
+      limb([[hx4,hipy],[sx4,sy4]], 0.28);
+      head(sx4+Math.cos(ba)*0.19, sy4+Math.sin(ba)*0.19, 0.12);
+      limb([[sx4,sy4],[sx4+Math.cos(ba+0.18)*0.62, sy4+Math.sin(ba+0.18)*0.62]], 0.10);
+      limb([[sx4,sy4],[sx4+Math.cos(ba-0.12)*0.60, sy4+Math.sin(ba-0.12)*0.60]], 0.10);
+      limb([[hx4,hipy],[hx4-Math.cos(ba-0.35)*0.5, hipy-Math.sin(ba-0.35)*0.5],[hx4-Math.cos(ba-0.5)*0.9, hipy-Math.sin(ba-0.5)*0.9]], 0.15);
+      limb([[hx4,hipy],[hx4-Math.cos(ba+0.30)*0.8, hipy-Math.sin(ba+0.30)*0.8]], 0.15);
     } else if (pose === 1){
       /* striking the ball: plant leg, extended kicking leg, arms spread */
       limb([[-0.12, 0.92],[-0.14, 0.46],[-0.12, 0.02]], 0.15);        /* plant leg */
@@ -695,11 +757,12 @@ footer{padding:26px var(--gut) 38px;border-top:1px solid var(--line);display:fle
         var lift = Math.max(0, Math.cos(pp))*0.18*amp;
         limb([[0, 0.92],[fx*0.45 + 0.10*amp, 0.48 + lift*0.5],[fx, lift]], 0.15);
       }
-      limb([[0, 0.90],[lean, 1.44]], 0.30);                           /* torso */
-      head(lean*1.3, 1.64, 0.12);
+      var bob = Math.abs(Math.sin(ph))*0.05*amp;                      /* stride bounce */
+      limb([[0, 0.90],[lean, 1.44+bob]], 0.30);                       /* torso */
+      head(lean*1.3, 1.64+bob, 0.12);
       for (var a2=0;a2<2;a2++){
         var ap = ph + Math.PI + a2*Math.PI;
-        limb([[lean*0.8, 1.36],[lean*0.8 + Math.sin(ap)*0.30*amp, 0.94]], 0.10);
+        limb([[lean*0.8, 1.36+bob],[lean*0.8 + Math.sin(ap)*0.30*amp, 0.94+bob]], 0.10);
       }
     }
     ctx.restore();
@@ -718,7 +781,7 @@ footer{padding:26px var(--gut) 38px;border-top:1px solid var(--line);display:fle
     }
     /* flight trail, scaled by ball speed */
     var spd = ballDist(p) - ballDist(clamp(p-0.01,0,1));
-    if (spd > 0.35){
+    if (spd > 0.35 && !inDribble(p)){
       for (var j=6;j>=1;j--){
         var bp = ballAt(clamp(p - j*0.005, 0, 1));
         var qt = proj(bp[0], bp[1], bp[2] + BR); if (!qt) continue;
@@ -760,8 +823,17 @@ footer{padding:26px var(--gut) 38px;border-top:1px solid var(--line);display:fle
       if (p <= KF[i][0]) break;
       var done = p >= KF[i+1][0];
       if (done){
-        line([[KF[i][1],KF[i][2]],[KF[i+1][1],KF[i+1][2]]], 1, 0.16);
-      } else {
+        if (dribbleSeg(i)){
+          /* a carry shows on the pass map as its dotted, weaving path */
+          ctx.setLineDash([3,5]);
+          var dpts = [];
+          for (var s2=0;s2<=10;s2++) dpts.push(dribblePos(i, s2/10));
+          line(dpts, 1, 0.16);
+          ctx.setLineDash([]);
+        } else {
+          line([[KF[i][1],KF[i][2]],[KF[i+1][1],KF[i+1][2]]], 1, 0.16);
+        }
+      } else if (!dribbleSeg(i)){
         var q0 = proj(KF[i][1],KF[i][2],0), q1 = proj(b[0],b[1],0);
         if (q0 && q1){
           ctx.beginPath(); ctx.moveTo(q0[0],q0[1]); ctx.lineTo(q1[0],q1[1]);
@@ -777,16 +849,35 @@ footer{padding:26px var(--gut) 38px;border-top:1px solid var(--line);display:fle
     var b0 = ballAt(clamp(p-be,0,1)), b1 = ballAt(clamp(p+be,0,1));
     var bvx = (b1[0]-b0[0])/(2*be), bvy = (b1[1]-b0[1])/(2*be);
     for (var d=0; d<shape.length; d++){
+      /* base block position, then the near men step out and close the ball down */
+      var bpx = shape[d][0] + b[0]*0.38, bpy = b[1] + shape[d][1];
+      var ddx = b[0]-bpx, ddy = b[1]-bpy, dd = Math.hypot(ddx,ddy);
+      var w2 = clamp((11-dd)/11, 0, 1); w2 = w2*w2*(3-2*w2)*0.72;
+      var px2 = bpx, py2 = bpy;
+      if (dd > 0.8){
+        px2 = bpx + (b[0]-ddx/dd*1.2 - bpx)*w2;
+        py2 = bpy + (b[1]-ddy/dd*1.2 + 0.6 - bpy)*w2;   /* stand off a metre, goal-side */
+      }
+      px2 = clamp(px2, -HALF+1, HALF-1); py2 = clamp(py2, 2, PL-1);
+      var dEff = Math.hypot(px2-b[0], py2-b[1]);
       ppl.push({
-        x: clamp(shape[d][0] + b[0]*0.38, -HALF+1, HALF-1),
-        y: clamp(b[1] + shape[d][1], 2, PL-1),
-        vx: bvx*0.38, vy: bvy,
+        x: px2, y: py2, vx: bvx*0.38, vy: bvy,
         dist: ballDist(p)*0.55 + d*1.31,
-        col: DEFEND, pose: 0, poseT: 0
+        col: DEFEND, pose: dEff < 3.4 ? 3 : 0, poseT: clamp((3.4-dEff)/2.2, 0, 1)
       });
     }
-    ppl.push({ x: clamp(b[0]*0.15,-6,6), y: 103.5, vx: bvx*0.15, vy: 0,
-               dist: ballDist(p)*0.35, col: DEFEND, pose: 0, poseT: 0 });
+    /* the keeper holds his line, then dives across the final shot — and fails */
+    var gkx = clamp(b[0]*0.15,-6,6), gky = 103.5, gkvx = bvx*0.15, gkPose = 0, gkT = 0;
+    if (p >= DIVE_A){
+      var bref = ballAt(DIVE_A);
+      gkT = clamp((p-DIVE_A)/(DIVE_B-DIVE_A), 0, 1);
+      var rch = clamp(gkT/0.6, 0, 1); rch = rch*rch*(3-2*rch);
+      gkx = clamp(bref[0]*0.15,-6,6) + rch*1.6;
+      gky = 103.5 + gkT*0.9;
+      gkvx = 3; gkPose = 4;
+    }
+    ppl.push({ x: gkx, y: gky, vx: gkvx, vy: 0,
+               dist: ballDist(p)*0.35, col: GK_D, pose: gkPose, poseT: gkT });
     for (var a=0; a<ATK.length; a++){
       var e = 0.008;
       var c0 = track(ATK[a], clamp(p-e,0,1)), c1 = track(ATK[a], clamp(p+e,0,1));
@@ -801,7 +892,7 @@ footer{padding:26px var(--gut) 38px;border-top:1px solid var(--line);display:fle
       }
       ppl.push({ x: pos[0], y: pos[1],
                  vx: (c1[0]-c0[0])/(2*e), vy: (c1[1]-c0[1])/(2*e),
-                 dist: atkDist[a](p), col: ATTACK, pose: pose, poseT: poseT });
+                 dist: atkDist[a](p), col: a === 0 ? GK_A : ATTACK, pose: pose, poseT: poseT });
     }
     ppl.sort(function(m,n){ return n.y - m.y; });
     for (var k2=0;k2<ppl.length;k2++){

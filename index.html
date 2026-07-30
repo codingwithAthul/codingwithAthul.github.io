@@ -254,3 +254,59 @@ footer{padding:30px var(--gut) 40px;border-top:1px solid var(--hair);
 </head>
 <body>
 
+<div class="sky" id="sky"></div>
+<canvas id="scene"></canvas>
+
+<!-- static ridgeline: shown when WebGL is off (mobile / reduced motion / failure) -->
+<svg class="ridge-fallback" id="ridgeFallback" viewBox="0 0 1440 420" preserveAspectRatio="none" aria-hidden="true" style="height:52vh">
+  <path d="M0 300 L180 196 L300 246 L470 132 L620 214 L760 150 L900 236 L1060 168 L1210 244 L1330 190 L1440 258 L1440 420 L0 420Z" fill="#FBFCFD" opacity=".95"/>
+  <path d="M0 348 L210 284 L390 322 L560 250 L740 306 L920 258 L1120 316 L1300 272 L1440 320 L1440 420 L0 420Z" fill="#DDE7EF"/>
+  <path d="M0 300 L180 196 L300 246 L470 132 L620 214 L760 150 L900 236 L1060 168 L1210 244 L1330 190 L1440 258"
+        fill="none" stroke="#2E7FA6" stroke-opacity=".22" stroke-width="1.5"/>
+  <path d="M470 132 L520 172 L470 200 L540 240 L470 276" fill="none" stroke="#FF6A3D" stroke-width="2" stroke-linecap="round" stroke-opacity=".8"/>
+  <path d="M760 150 L806 190 L760 218 L822 256 L760 292" fill="none" stroke="#F5C453" stroke-width="2" stroke-linecap="round" stroke-opacity=".85"/>
+</svg>
+
+<!-- altimeter: scroll progress expressed as vertical drop -->
+<aside class="altimeter" aria-hidden="true">
+  <span class="val" id="altVal">2540 m</span>
+  <span class="track"><span class="fill" id="altFill"></span><span class="dot" id="altDot" style="top:0"></span></span>
+  <span class="cap">elevation</span>
+</aside>
+
+<header class="nav">
+  <a class="mark" href="#top">Athul<b>.</b>Sasidharan</a>
+  <nav aria-label="Sections">
+    <ul>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#record">Record</a></li>
+      <li><a href="#toolkit">Toolkit</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- ================= HERO ================= -->
+  <section class="hero wrap">
+    <div class="hero-meta rv in">
+      <span><i class="pip live"></i> Open to Senior Analyst &amp; BA roles</span>
+      <span>Vancouver, BC</span>
+      <span>UBC MDS &#8217;26</span>
+    </div>
+    <h1 class="rv in">Athul Sasidharan</h1>
+    <p class="lede rv in" data-d="1">
+      I build the pipelines and the audits that tell you whether a system is
+      <strong>actually working</strong>. Banking data engineering at Axis Bank, clinical
+      data quality at BC Children&#8217;s Hospital, and retrieval systems that cite
+      their sources.
+    </p>
+    <div class="cta-row rv in" data-d="2">
+      <a class="btn btn-solid" href="#work">See the work <span aria-hidden="true">&#8595;</span></a>
+      <a class="btn btn-ghost" href="mailto:athulchira@gmail.com">athulchira@gmail.com</a>
+      <a class="btn btn-ghost" href="https://www.linkedin.com/in/athul-ash-sasidharan-48a1ba195/" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">&#8599;</span></a>
+      <a class="btn btn-ghost" href="https://github.com/codingwithAthul" target="_blank" rel="noopener">GitHub <span aria-hidden="true">&#8599;</span></a>
+    </div>
+    <div class="scrollcue" aria-hidden="true"><i></i> Scroll to descend</div>
+  </section>

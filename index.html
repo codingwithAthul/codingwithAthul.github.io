@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Athul Sasidharan — Data Scientist, Vancouver</title>
+<meta name="description" content="Data scientist in Vancouver. UBC Master of Data Science 2026. Data pipelines at Axis Bank, clinical data at BC Children's Hospital, retrieval systems, dashboards and packages.">
+<meta property="og:title" content="Athul Sasidharan — Data Scientist">
+<meta property="og:description" content="Pipelines, audits and retrieval systems. UBC MDS 2026, Vancouver BC.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ground:#F4F2ED;
+  --ink:#16232A;
+  --ink-soft:#54646E;
+  --line:rgba(22,35,42,.14);
+  --line-2:rgba(22,35,42,.26);
+  --attack:#E8552F;
+  --defend:#66788A;
+  --link:#2E7FA6;
+  --gold:#F2B441;
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --body:"Instrument Sans",ui-sans-serif,system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+  --gut:clamp(20px,5vw,72px);
+  --maxw:1180px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);
+  font-size:clamp(15px,1.05vw,17px);line-height:1.62;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+img{max-width:100%;display:block}
+
+#pitch{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:0;transition:opacity 1s ease .2s}
+#pitch.ready{opacity:1}
+
+/* ---------- nav ---------- */
+header.nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;
+  justify-content:space-between;padding:16px var(--gut);
+  background:linear-gradient(180deg,rgba(244,242,237,.9),rgba(244,242,237,0))}
+.mark{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;text-decoration:none}
+.mark b{color:var(--attack)}
+.nav ul{display:flex;gap:20px;list-style:none;margin:0;padding:0;
+  font-family:var(--mono);font-size:11px;letter-spacing:.11em;text-transform:uppercase}
+.nav a{text-decoration:none;color:var(--ink-soft);transition:color .2s}
+.nav a:hover,.nav a:focus-visible{color:var(--attack)}
+
+/* ---------- layout ---------- */
+main{position:relative;z-index:1}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--gut)}
+section{padding:clamp(72px,11vh,150px) 0}
+
+/* section label: one word, thin rule beneath. Nothing else. */
+h2{font-family:var(--display);font-size:clamp(30px,4.6vw,58px);
+  font-variation-settings:"wdth" 96,"wght" 620;line-height:1;letter-spacing:-.025em;
+  margin:0 0 14px;color:var(--ink)}
+.rule{width:56px;height:2px;background:var(--gold);margin:0 0 clamp(30px,4vh,52px);border-radius:2px}
+
+h1{font-family:var(--display);font-size:clamp(48px,10vw,142px);
+  font-variation-settings:"wdth" 100,"wght" 650;line-height:.88;letter-spacing:-.035em;
+  margin:0 0 24px;text-wrap:balance}
+h3{font-family:var(--display);font-variation-settings:"wdth" 92,"wght" 620;
+  font-size:clamp(18px,1.45vw,22px);line-height:1.2;letter-spacing:-.015em;margin:0}
+p{margin:0 0 14px}
+
+/* ---------- hero ---------- */
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;
+  padding-bottom:clamp(56px,9vh,110px);padding-top:120px}
+.hero-top{display:flex;align-items:flex-end;gap:clamp(20px,3vw,44px);flex-wrap:wrap}
+.shot{width:clamp(96px,10vw,132px);height:clamp(96px,10vw,132px);border-radius:50%;
+  object-fit:cover;border:1px solid var(--line-2);flex:none}
+.about{font-size:clamp(16px,1.4vw,21px);line-height:1.55;color:var(--ink-soft);max-width:60ch;margin:0 0 30px}
+.cta-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-family:var(--mono);
+  font-size:12px;letter-spacing:.05em;padding:12px 19px;border-radius:2px;border:1px solid var(--line-2);
+  background:transparent;color:var(--ink);
+  transition:transform .22s cubic-bezier(.2,.8,.2,1),background .22s,color .22s,border-color .22s}
+.btn:hover,.btn:focus-visible{border-color:var(--ink);transform:translateY(-2px)}
+.btn-solid{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.btn-solid:hover,.btn-solid:focus-visible{background:var(--attack);border-color:var(--attack)}
+.meta{display:flex;flex-wrap:wrap;gap:6px 22px;margin:0 0 26px;font-family:var(--mono);
+  font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+
+/* ---------- transparent tiles ---------- */
+.tile{background:transparent;border:1px solid var(--line);border-radius:3px;
+  transition:border-color .3s,transform .3s cubic-bezier(.2,.8,.2,1)}
+.tile:hover{border-color:var(--line-2);transform:translateY(-2px)}
+
+.edu{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.edu .tile{padding:20px 22px;display:flex;flex-direction:column;gap:6px}
+.edu .when{font-family:var(--mono);font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-soft)}
+.edu a{color:inherit;text-decoration:none;border-bottom:1px solid var(--line-2);transition:border-color .2s,color .2s}
+.edu a:hover,.edu a:focus-visible{color:var(--attack);border-color:var(--attack)}
+.edu .school{font-family:var(--mono);font-size:11.5px;letter-spacing:.03em;color:var(--ink-soft)}
+
+.roles{border-top:1px solid var(--line)}
+.role{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.7fr);gap:clamp(12px,3vw,48px);
+  padding:clamp(22px,2.8vw,34px) 0;border-bottom:1px solid var(--line)}
+.role .when{font-family:var(--mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--attack);margin:0 0 6px}
+.role .org{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--ink-soft);margin:4px 0 0}
+.role .org a{color:var(--link);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s}
+.role .org a:hover{border-color:var(--link)}
+.role ul{margin:0;padding-left:16px;color:var(--ink-soft)}
+.role li{margin-bottom:7px}
+.role li::marker{color:var(--attack)}
+.role li b{color:var(--ink);font-weight:600}
+.role p.plain{color:var(--ink-soft);margin:0}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.card{padding:clamp(20px,2.2vw,28px);display:flex;flex-direction:column;gap:11px}
+.card .when{font-family:var(--mono);font-size:10px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--ink-soft);margin:0}
+.card p.desc{color:var(--ink-soft);font-size:.95em;margin:0}
+.why{border-left:2px solid var(--gold);padding:8px 12px;font-size:.9em;color:var(--ink);margin:0}
+.why b{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--ink-soft);display:block;margin-bottom:3px;font-weight:500}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tags i{font-style:normal;font-family:var(--mono);font-size:10px;letter-spacing:.03em;
+  padding:3px 8px;border-radius:2px;border:1px solid var(--line);color:var(--link)}
+.metric{font-family:var(--mono);font-size:12px;color:var(--ink);display:flex;gap:8px;align-items:baseline}
+.metric b{font-size:18px;font-weight:500;color:var(--attack);font-variant-numeric:tabular-nums}
+.pills{display:flex;flex-wrap:wrap;gap:7px;margin-top:auto;padding-top:12px;border-top:1px solid var(--line)}
+.pill{display:inline-flex;align-items:center;gap:5px;text-decoration:none;font-family:var(--mono);
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:6px 12px;
+  border:1px solid var(--line-2);border-radius:99px;color:var(--ink);
+  transition:background .2s,color .2s,border-color .2s,transform .2s}
+.pill:hover,.pill:focus-visible{background:var(--ink);color:var(--ground);border-color:var(--ink);transform:translateY(-1px)}
+.pill.dead{border-style:dashed;color:var(--ink-soft);cursor:default}
+.pill.dead:hover{background:transparent;color:var(--ink-soft);border-color:var(--line-2);transform:none}
+.sub{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-soft);margin:clamp(40px,5vh,64px) 0 18px;display:flex;align-items:center;gap:12px}
+.sub::after{content:"";height:1px;flex:1;background:var(--line)}
+
+.kit{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.kit>div{padding:20px 20px;border:1px solid var(--line);border-radius:3px}
+.kit h4{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--link);margin:0 0 11px;font-weight:500}
+.kit ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:5px}
+.kit li{font-family:var(--mono);font-size:11.5px;padding:3px 8px;border:1px solid var(--line);
+  border-radius:2px;transition:border-color .2s,color .2s}
+.kit li:hover{border-color:var(--attack);color:var(--attack)}
+
+.contact a.big{font-family:var(--display);font-variation-settings:"wdth" 96,"wght" 600;
+  font-size:clamp(22px,3.4vw,44px);text-decoration:none;letter-spacing:-.02em;display:inline-block;
+  border-bottom:2px solid var(--line-2);padding-bottom:2px;transition:border-color .25s,color .25s}
+.contact a.big:hover,.contact a.big:focus-visible{color:var(--attack);border-color:var(--attack)}
+.contact .rows{display:flex;flex-wrap:wrap;gap:12px 36px;margin-top:26px;
+  font-family:var(--mono);font-size:12px;letter-spacing:.04em}
+.contact .rows a{color:var(--link);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s}
+.contact .rows a:hover{border-color:var(--link)}
+footer{padding:26px var(--gut) 38px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;
+  gap:8px 22px;justify-content:space-between;font-family:var(--mono);font-size:10.5px;
+  letter-spacing:.09em;text-transform:uppercase;color:var(--ink-soft)}
+
+.rv{opacity:0;transform:translateY(22px);
+  transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+.rv[data-d="1"]{transition-delay:.06s}
+.rv[data-d="2"]{transition-delay:.12s}
+.rv[data-d="3"]{transition-delay:.18s}
+.rv[data-d="4"]{transition-delay:.24s}
+.rv[data-d="5"]{transition-delay:.3s}
+:focus-visible{outline:2px solid var(--attack);outline-offset:3px}
+
+@media (max-width:820px){ .role{grid-template-columns:1fr} .nav ul li:nth-child(n+3){display:none} }
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .rv{opacity:1;transform:none;transition:none}
+  *{transition-duration:.01ms !important}
+}
+</style>
+</head>
+<body>
+<canvas id="pitch"></canvas>
+
+<header class="nav">
+  <a class="mark" href="#top">Athul<b>.</b>Sasidharan</a>
+  <nav aria-label="Sections"><ul>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul></nav>
+</header>
+
+<main id="top">
+
+  <section class="hero wrap">
+    <div class="hero-top rv in">
+      <img class="shot" src="assets/athul-headshot.png" alt="Athul Sasidharan">
+      <div style="flex:1;min-width:260px">
+        <div class="meta"><span>Vancouver, BC</span><span>UBC MDS &#8217;26</span></div>
+        <h1>Athul Sasidharan</h1>
+      </div>
+    </div>
+    <p class="about rv in" data-d="1">
+      Mechanical engineer, Business Consultant, then data engineer, now a data scientist in
+      Vancouver. I&#8217;m best where the data is messy, the deadline is real, and somebody needs
+      an answer they can defend afterwards.
+    </p>
+    <div class="cta-row rv in" data-d="2">
+      <a class="btn btn-solid" href="assets/Athul_Sasidharan_Resume.pdf" download>Download CV</a>
+      <a class="btn" href="mailto:athulchira@gmail.com">athulchira@gmail.com</a>
+      <a class="btn" href="https://www.linkedin.com/in/athul-ash-sasidharan-48a1ba195/" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn" href="https://github.com/codingwithAthul" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </section>
+
+  <section id="education" class="wrap">
+    <h2 class="rv">Education</h2><div class="rule rv"></div>
+    <div class="edu">
+      <div class="tile rv" data-d="1">
+        <p class="when">Sep 2025 &ndash; Jun 2026</p>
+        <h3><a href="https://masterdatascience.ubc.ca/programs/vancouver" target="_blank" rel="noopener">Masters in Data Science</a></h3>
+        <p class="school"><a href="https://www.ubc.ca/" target="_blank" rel="noopener">The University of British Columbia, Vancouver</a></p>
+      </div>
+      <div class="tile rv" data-d="2">
+        <p class="when">Sep 2024 &ndash; May 2025</p>
+        <h3><a href="https://www.bcit.ca/programs/global-leadership-graduate-certificate-full-time-a500grcert/#courses" target="_blank" rel="noopener">Global Leadership Graduate Certificate</a></h3>
+        <p class="school"><a href="https://www.bcit.ca/" target="_blank" rel="noopener">British Columbia Institute of Technology, Vancouver</a></p>
+      </div>
+      <div class="tile rv" data-d="3">
+        <p class="when">2018 &ndash; 2022</p>
+        <h3>Bachelor of Technology, Mechanical Engineering</h3>
+        <p class="school"><a href="https://www.nitt.edu/" target="_blank" rel="noopener">National Institute of Technology, Tiruchirappalli</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="work" class="wrap">
+    <h2 class="rv">Work experience</h2><div class="rule rv"></div>
+    <div class="roles">
+      <article class="role rv">
+        <div><p class="when">Apr 2026 &ndash; Jun 2026</p><h3>Data Analyst (Capstone Project)</h3>
+          <p class="org">BC Children&#8217;s Hospital &middot; UBC MDS Capstone</p></div>
+        <div>
+          <p class="plain">Investigating the impacts of Computerized Provider Order Entry (CPOE)
+            on Pediatric Laboratory Testing. Full time Capstone Project for the UBC MDS program.</p>
+          <div class="tags" style="margin-top:12px"><i>Microsoft SQL Server</i><i>R</i><i>ggplot</i><i>Data Analysis</i><i>Exploratory Data Analysis</i><i>Data Science</i></div>
+        </div>
+      </article>
+
+      <article class="role rv" data-d="1">
+        <div><p class="when">Jul 2022 &ndash; Feb 2024</p><h3>Data Engineer</h3>
+          <p class="org">Axis Bank Ltd &middot; Bangalore</p></div>
+        <ul>
+          <li>Built ingestion and transformation pipelines in Oracle, PL/SQL and Informatica
+            serving <b>five-plus reporting teams</b>, under banking regulatory constraints where a
+            wrong number is a filing problem rather than a dashboard problem.</li>
+          <li>Owned unit testing and production release in Blaze/TRAID, catching breakages
+            pre-deploy to keep live environments stable.</li>
+          <li>Translated business requirements into data models with stakeholders in the room,
+            then wrote the documentation standard the team adopted.</li>
+        </ul>
+      </article>
+
+      <article class="role rv" data-d="2">
+        <div><p class="when">May 2020 &ndash; Apr 2022</p><h3>Business Consultant</h3>
+          <p class="org">Part-time &middot; Agies Safety Solutions &middot; Kerala</p></div>
+        <ul>
+          <li>Designed a new product sales model from statistical analysis of the existing book,
+            contributing to <b>5&times; revenue growth</b>.</li>
+          <li>Automated finance and administrative reporting, removing up to <b>30%</b> of annual
+            operational turnover in avoidable cost.</li>
+          <li>Ran two years of market and competitor research that leadership used to set direction.</li>
+        </ul>
+      </article>
+
+      <article class="role rv" data-d="3">
+        <div><p class="when">Jun 2025 &ndash; present</p><h3>Cash Supervisor</h3>
+          <p class="org">Shoppers Drug Mart &middot; Vancouver</p></div>
+        <ul>
+          <li>Register, lottery terminal, merchandise intake, backroom inventory and end-of-day
+            close in a high-volume pharmacy, alongside the master&#8217;s.</li>
+        </ul>
+      </article>
+
+      <article class="role rv" data-d="4">
+        <div><p class="when">2018 &ndash; 2020</p><h3>Organising Committee Head</h3>
+          <p class="org"><a href="https://sportsfete.nitt.edu/" target="_blank" rel="noopener">Sportsfete</a>,
+            <a href="https://nss.nitt.edu/" target="_blank" rel="noopener">NSS</a> &amp;
+            <a href="https://www.instagram.com/aaveg.nitt/?hl=en" target="_blank" rel="noopener">Aaveg</a>
+            &middot; NIT Tiruchirappalli</p></div>
+        <ul>
+          <li>Logistics, budgets, sponsor negotiation and on-site escalation for <b>75+ events</b>
+            across <b>14 departments</b> and <b>13,000+ participants</b>.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section id="projects" class="wrap">
+    <h2 class="rv">Projects</h2><div class="rule rv"></div>
+    <div class="grid">
+
+      <article class="tile card rv" data-d="1">
+        <p class="when">Jul 2026 &middot; HCLTech &times; UBC hackathon</p>
+        <h3>CodeIQ &mdash; codebase knowledge graph</h3>
+        <p class="desc">Parses a 100K-line React Native codebase into a queryable knowledge graph,
+          then answers plain-English questions about structure and impact. Confidence is scored
+          deterministically from retrieval relevance rather than self-reported by the model.</p>
+        <p class="why"><b>why</b>Every unfamiliar codebase starts with two hours of &#8220;wait, who calls this?&#8221; We wanted that down to one question.</p>
+        <div class="tags"><i>ts-morph</i><i>NetworkX</i><i>ChromaDB</i><i>LangChain</i><i>Groq</i><i>Shiny</i></div>
+        <span class="metric"><b>28/30</b> on the benchmark set, zero errors</span>
+        <div class="pills">
+          <a class="pill" href="https://github.com/goudmani/codeiq_source_code_knowledge_graph" target="_blank" rel="noopener">GitHub</a>
+          <a class="pill" href="https://codeiq-source-code-knowledge-graph-latest.onrender.com/" target="_blank" rel="noopener">Live app</a>
+        </div>
+      </article>
+
+      <article class="tile card rv" data-d="2">
+        <p class="when">2026 &middot; Python package</p>
+        <h3>geospatial-toolkit</h3>
+        <p class="desc">A lightweight package standardising the geospatial operations people
+          rewrite by hand &mdash; coordinate formats, great-circle distance, point-in-polygon city
+          lookup, and antipode calculation with reverse geocoding, which nothing else offers in
+          one call.</p>
+        <p class="why"><b>why</b>Half the cohort was rewriting the same distance function. We packaged it so the other half wouldn&#8217;t have to.</p>
+        <div class="tags"><i>Python</i><i>GeoPandas</i><i>pytest</i><i>quartodoc</i><i>TestPyPI</i></div>
+        <span class="metric"><b>v3.0.0</b> tested, documented, published to TestPyPI</span>
+        <div class="pills">
+          <a class="pill" href="https://github.com/UBC-MDS/geospatial-toolkit" target="_blank" rel="noopener">GitHub</a>
+          <a class="pill" href="https://ubc-mds.github.io/geospatial-toolkit/" target="_blank" rel="noopener">Docs</a>
+        </div>
+      </article>
+
+      <article class="tile card rv" data-d="3">
+        <p class="when">Apr 2026 &middot; Retrieval system</p>
+        <h3>Smart product review search</h3>
+        <p class="desc">Hybrid retrieval over Amazon software reviews &mdash; BM25 and dense
+          embeddings fused with reciprocal rank fusion, then an LLM that has to cite the review it
+          used. Benchmarked against a faster model and kept the slower one, because it admitted
+          retrieval gaps instead of over-committing.</p>
+        <p class="why"><b>why</b>16,000 reviews and no way to ask them anything. Now it either shows its receipts or keeps quiet.</p>
+        <div class="tags"><i>BM25</i><i>FAISS</i><i>RRF</i><i>Groq</i><i>Tavily</i><i>Streamlit</i></div>
+        <span class="metric"><b>15,972</b> reviews indexed and source-cited</span>
+        <div class="pills">
+          <a class="pill" href="https://github.com/codingwithAthul/Information_Rag_Retrieval_Project" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </article>
+
+      <article class="tile card rv" data-d="4">
+        <p class="when">2026 &middot; Deployed dashboard</p>
+        <h3>Vancouver Park Finder</h3>
+        <p class="desc">A public dashboard for searching Vancouver parks against whatever a person
+          actually cares about &mdash; washrooms, dog areas, playgrounds, distance from home.</p>
+        <p class="why"><b>why</b>248 parks in this city and no simple way to ask which one has a washroom and lets the dog off the leash.</p>
+        <div class="tags"><i>Python</i><i>Dash</i><i>Plotly</i><i>Altair</i></div>
+        <span class="metric"><b>248</b> parks, filterable in one screen</span>
+        <div class="pills">
+          <a class="pill" href="https://github.com/UBC-MDS/DSCI-532_2026_3_vancouver_park_dashboard" target="_blank" rel="noopener">GitHub</a>
+          <a class="pill" href="https://019c91e8-5952-d69b-140e-530221568f2d.share.connect.posit.cloud/" target="_blank" rel="noopener">Live app</a>
+        </div>
+      </article>
+
+      <article class="tile card rv" data-d="5">
+        <p class="when">2026 &middot; Cloud deployment</p>
+        <h3>Rainfall prediction API</h3>
+        <p class="desc">A model trained on an EMR/Spark cluster, packaged behind FastAPI and served
+          from a t3a.micro EC2 instance. Loaded once at import rather than per request, with
+          Pydantic-validated payloads and cross-testing against a classmate&#8217;s endpoint.</p>
+        <p class="why"><b>why</b>A model sitting in a .joblib file has never helped anybody. This one at least answers the phone.</p>
+        <div class="tags"><i>AWS EC2</i><i>EMR</i><i>Spark</i><i>FastAPI</i><i>Pydantic</i></div>
+        <div class="pills">
+          <a class="pill" href="https://github.com/codingwithAthul/rainfall-prediction-aws-deployment" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </article>
+
+      <article class="tile card rv" data-d="6">
+        <p class="when">2026 &middot; Reproducible ML</p>
+        <h3>Hotel cancellation prediction</h3>
+        <p class="desc">A classification study on hotel booking cancellations, built so a stranger
+          could re-run it: pinned environment, containerised, scripted data flow, and a report that
+          regenerates from source.</p>
+        <p class="why"><b>why</b>Ran it, got a number, couldn&#8217;t reproduce the number a week later. Built this so that stops happening.</p>
+        <div class="tags"><i>Python</i><i>scikit-learn</i><i>Docker</i><i>Quarto</i></div>
+        <div class="pills">
+          <a class="pill" href="https://github.com/ahass9/DSCI-522-Group-Project" target="_blank" rel="noopener">GitHub</a>
+          <a class="pill" href="https://ahass9.github.io/DSCI-522-Group-Project/reports/hotel_cancellation_classification_analysis.html" target="_blank" rel="noopener">Report</a>
+        </div>
+      </article>
+    </div>
+
+    <p class="sub rv">Built because I wanted to</p>
+    <div class="grid">
+      <article class="tile card rv" data-d="1">
+        <p class="when">Jan 2026 &middot; Writing</p>
+        <h3>Multi-armed bandits, explained</h3>
+        <p class="desc">A written walkthrough of the explore-versus-exploit problem and why A/B
+          testing is often the wrong tool for the job it gets used for.</p>
+        <p class="why"><b>why</b>Slot machines have taught statisticians more than statisticians have taught slot machines. Wrote it down before I forgot why.</p>
+        <div class="tags"><i>Writing</i><i>Bandits</i><i>Experimentation</i></div>
+        <div class="pills">
+          <a class="pill" href="https://github.com/codingwithAthul/Multi-Armed-Bandits" target="_blank" rel="noopener">GitHub</a>
+          <a class="pill" href="https://codingwithathul.github.io/Multi-Armed-Bandits/" target="_blank" rel="noopener">Read it</a>
+        </div>
+      </article>
+
+      <article class="tile card rv" data-d="2">
+        <p class="when">Apr 2026 &middot; Tooling</p>
+        <h3>NotebookLM on Claude Code</h3>
+        <p class="desc">An integration bridging Google NotebookLM into Claude Code, with automated
+          version management, API safety checks and rollback when a change misbehaves.</p>
+        <p class="why"><b>why</b>Two tools I use constantly that refused to speak to each other. Now they do, and there&#8217;s an undo button.</p>
+        <div class="tags"><i>Python</i><i>APIs</i><i>Automation</i></div>
+        <div class="pills">
+          <a class="pill" href="https://github.com/codingwithAthul/Notebooklm-on-Claude" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="toolkit" class="wrap">
+    <h2 class="rv">Toolkit</h2><div class="rule rv"></div>
+    <div class="kit rv" data-d="1">
+      <div><h4>Query &amp; language</h4><ul><li>SQL</li><li>Python</li><li>R</li><li>PL/SQL</li><li>Bash</li></ul></div>
+      <div><h4>Analysis &amp; modelling</h4><ul><li>pandas</li><li>scikit-learn</li><li>dbplyr</li><li>tidyverse</li><li>Causal inference</li><li>Experiment design</li></ul></div>
+      <div><h4>Pipelines &amp; cloud</h4><ul><li>Informatica</li><li>Spark</li><li>AWS EMR / S3 / EC2</li><li>Warehouse design</li><li>Oracle</li><li>PostgreSQL</li><li>SQL Server</li></ul></div>
+      <div><h4>Reporting &amp; delivery</h4><ul><li>Power BI</li><li>Shiny</li><li>Dash</li><li>Quarto</li><li>ggplot2</li><li>Streamlit</li></ul></div>
+      <div><h4>LLM systems</h4><ul><li>RAG</li><li>BM25 + dense hybrid</li><li>FAISS</li><li>ChromaDB</li><li>LangChain</li><li>Evaluation harnesses</li></ul></div>
+      <div><h4>Practice</h4><ul><li>Git</li><li>Docker</li><li>CI</li><li>Reproducible research</li><li>Data science ethics</li></ul></div>
+    </div>
+  </section>
+
+  <section id="contact" class="wrap contact">
+    <h2 class="rv">Contact</h2><div class="rule rv"></div>
+    <p class="rv" data-d="1"><a class="big" href="mailto:athulchira@gmail.com">athulchira@gmail.com</a></p>
+    <div class="rows rv" data-d="2">
+      <span><a href="tel:+17788830420">+1 778 883 0420</a></span>
+      <span><a href="https://www.linkedin.com/in/athul-ash-sasidharan-48a1ba195/" target="_blank" rel="noopener">LinkedIn</a></span>
+      <span><a href="https://github.com/codingwithAthul" target="_blank" rel="noopener">GitHub</a></span>
+      <span><a href="assets/Athul_Sasidharan_Resume.pdf" download>Download CV</a></span>
+      <span>Vancouver, British Columbia</span>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>&copy; 2026 Athul Sasidharan</span>
+  <span>Vancouver &middot; 49.28&deg;N</span>
+  <span>Scroll for the full move.</span>
+</footer>
+
+<script>
+/* ============================================================
+   THE MOVE — a single attacking play, scrubbed by scroll.
+   Perspective-projected Canvas 2D. No WebGL, no library.
+   Every position is a pure function of scroll, so the play
+   runs backwards correctly when the reader scrolls up.
+   ============================================================ */
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* reveals run regardless of the canvas */
+  var targets = document.querySelectorAll('.rv:not(.in)');
+  if (reduce || !('IntersectionObserver' in window)) {
+    targets.forEach(function(t){ t.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {rootMargin:'0px 0px -12% 0px', threshold:0.08});
+    targets.forEach(function(t){ io.observe(t); });
+  }
+  if (reduce) return;
+
+  var PL = 105, HALF = 34, GOAL_HALF = 3.66;
+  var PHI = 34 * Math.PI/180, BACK = 42, HGT = 30;
+  var CAM_A = 10, CAM_B = 98, GOAL_P = 0.92;
+
+  /* p, x, y, receiver, lofted */
+  var KF = [
+    [0.000,   0,   6,  0, 0], [0.040, -14,  14,  1, 0], [0.080,  -4,  22,  3, 0],
+    [0.120,  14,  16,  2, 0], [0.170,  28,  26,  4, 0], [0.220,  30,  44,  6, 0],
+    [0.270,  14,  48,  8, 0], [0.330,   0,  34,  3, 0], [0.390, -29,  42,  5, 1],
+    [0.450, -30,  58,  7, 0], [0.510,  -8,  62, 10, 0], [0.560,   4,  56,  8, 0],
+    [0.620, -26,  74,  7, 0], [0.680,  -6,  72,  8, 0], [0.740,  26,  76,  6, 0],
+    [0.800,  30,  94,  6, 0], [0.870,  10, 100, 10, 1], [0.920,   2, 105.6, -1, 1],
+    [1.000,   1, 107.5, -1, 0]
+  ];
+
+  /* attacker waypoints [p, x, y] — endpoints match the pass they receive */
+  var ATK = [
+    [[0,0,6],[0.4,0,14],[1,0,24]],
+    [[0,-14,10],[0.04,-14,14],[0.5,-18,36],[1,-20,56]],
+    [[0,14,10],[0.12,14,16],[0.5,18,36],[1,20,56]],
+    [[0,-2,16],[0.08,-4,22],[0.33,0,34],[0.7,2,52],[1,0,66]],
+    [[0,26,16],[0.17,28,26],[0.5,30,48],[1,30,68]],
+    [[0,-26,18],[0.39,-29,42],[0.7,-30,60],[1,-28,74]],
+    [[0,30,32],[0.22,30,44],[0.74,26,76],[0.80,30,94],[1,30,97]],
+    [[0,-30,40],[0.45,-30,58],[0.62,-26,74],[1,-20,88]],
+    [[0,10,36],[0.27,14,48],[0.56,4,56],[0.68,-6,72],[1,-2,90]],
+    [[0,8,28],[0.5,10,54],[1,6,82]],
+    [[0,-4,48],[0.51,-8,62],[0.75,2,86],[0.87,10,100],[0.92,9,100.8],[1,8,101.5]]
+  ];
+
+  function track(w, p){
+    if (p <= w[0][0]) return [w[0][1], w[0][2]];
+    if (p >= w[w.length-1][0]) return [w[w.length-1][1], w[w.length-1][2]];
+    for (var i=0;i<w.length-1;i++){
+      if (p >= w[i][0] && p <= w[i+1][0]){
+        var t = (p - w[i][0]) / (w[i+1][0] - w[i][0]);
+        var e = t*t*(3-2*t);
+        return [w[i][1]+(w[i+1][1]-w[i][1])*e, w[i][2]+(w[i+1][2]-w[i][2])*e];
+      }
+    }
+    return [w[0][1], w[0][2]];
+  }
+
+  function ballAt(p){
+    if (p <= 0) return [KF[0][1], KF[0][2], 0];
+    var last = KF[KF.length-1];
+    if (p >= 1) return [last[1], last[2], 0];
+    for (var i=0;i<KF.length-1;i++){
+      if (p >= KF[i][0] && p <= KF[i+1][0]){
+        var t = (p - KF[i][0]) / (KF[i+1][0] - KF[i][0]);
+        var e = 1 - Math.pow(1-t, 2.2);
+        var z = Math.sin(Math.PI*t) * (KF[i+1][4] ? 7 : 0);
+        return [KF[i][1]+(KF[i+1][1]-KF[i][1])*e, KF[i][2]+(KF[i+1][2]-KF[i][2])*e, z];
+      }
+    }
+    return [last[1], last[2], 0];
+  }
+  function camY(p){ return CAM_A + Math.min(p/GOAL_P, 1) * (CAM_B - CAM_A); }
+  function clamp(v,a,b){ return v<a?a:(v>b?b:v); }
+
+  var cv = document.getElementById('pitch'), ctx = cv.getContext('2d');
+  var W=0, H=0, FOC=980, CX=0, CYPX=0;
+
+  function resize(){
+    var dpr = Math.min(devicePixelRatio||1, 2);
+    W = innerWidth; H = innerHeight;
+    cv.width = W*dpr; cv.height = H*dpr;
+    cv.style.width = W+'px'; cv.style.height = H+'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    FOC = Math.min(980, W*0.66);
+    CX = W/2; CYPX = H*0.42;
+  }
+  resize();
+  addEventListener('resize', resize);
+
+  function proj(x,y,z,cy){
+    var dy = y - (cy - BACK), dz = z - HGT;
+    var Y = dy*Math.sin(PHI) + dz*Math.cos(PHI);
+    var Z = dy*Math.cos(PHI) - dz*Math.sin(PHI);
+    if (Z < 1) return null;
+    return [CX + FOC*x/Z, CYPX - FOC*Y/Z, Z];
+  }
+
+  function line(cy, pts, w, alpha){
+    ctx.beginPath(); var started=false;
+    for (var i=0;i<pts.length;i++){
+      var q = proj(pts[i][0], pts[i][1], 0, cy);
+      if (!q){ started=false; continue; }
+      if (!started){ ctx.moveTo(q[0],q[1]); started=true; } else ctx.lineTo(q[0],q[1]);
+    }
+    ctx.strokeStyle = 'rgba(22,35,42,'+alpha+')'; ctx.lineWidth = w; ctx.stroke();
+  }
+  function arc(cy, cx0, cy0, r, a0, a1, alpha){
+    var pts=[]; for (var a=a0;a<=a1;a+=0.12) pts.push([cx0+Math.cos(a)*r, cy0+Math.sin(a)*r]);
+    line(cy, pts, 1, alpha);
+  }
+
+  function drawPitch(cy){
+    var A = 0.13;
+    line(cy, [[-HALF,0],[HALF,0],[HALF,PL],[-HALF,PL],[-HALF,0]], 1.2, A);
+    line(cy, [[-HALF,PL/2],[HALF,PL/2]], 1, A);
+    arc(cy, 0, PL/2, 9.15, 0, Math.PI*2, A);
+    [0,1].forEach(function(end){
+      var b = end ? PL : 0, s = end ? -1 : 1;
+      line(cy, [[-20.15,b],[-20.15,b+s*16.5],[20.15,b+s*16.5],[20.15,b]], 1, A);
+      line(cy, [[-9.16,b],[-9.16,b+s*5.5],[9.16,b+s*5.5],[9.16,b]], 1, A*0.8);
+      line(cy, [[-GOAL_HALF,b],[-GOAL_HALF,b+s*2],[GOAL_HALF,b+s*2],[GOAL_HALF,b]], 1.4, A*1.8);
+    });
+  }
+
+  function dot(cy, x, y, z, r, fill, ring){
+    var q = proj(x, y, z, cy); if (!q) return;
+    var s = Math.max(1.6, r * FOC / q[2]);
+    ctx.beginPath(); ctx.arc(q[0], q[1], s, 0, Math.PI*2);
+    ctx.fillStyle = fill; ctx.fill();
+    if (ring){ ctx.strokeStyle = ring; ctx.lineWidth = 1.2; ctx.stroke(); }
+  }
+
+  function render(p){
+    var cy = camY(p);
+    ctx.clearRect(0,0,W,H);
+    drawPitch(cy);
+
+    var b = ballAt(p);
+
+    /* pass map: every completed pass stays on the pitch */
+    for (var i=0;i<KF.length-1;i++){
+      if (p <= KF[i][0]) break;
+      var done = p >= KF[i+1][0];
+      var ex = done ? KF[i+1][1] : b[0], ey = done ? KF[i+1][2] : b[1];
+      line(cy, [[KF[i][1],KF[i][2]],[ex,ey]], done ? 1 : 1.8,
+           done ? 0.16 : 0.0);
+      if (!done){
+        var q0 = proj(KF[i][1],KF[i][2],0,cy), q1 = proj(ex,ey,0,cy);
+        if (q0 && q1){
+          ctx.beginPath(); ctx.moveTo(q0[0],q0[1]); ctx.lineTo(q1[0],q1[1]);
+          ctx.strokeStyle = 'rgba(232,85,47,.55)'; ctx.lineWidth = 1.8; ctx.stroke();
+        }
+      }
+    }
+
+    /* defenders: a block that shifts with the ball and stays goal-side */
+    var shape = [[-22,12],[-8,12],[8,12],[22,12],[-16,4],[0,4],[16,4],[-12,-5],[0,-5],[12,-5]];
+    var far = [];
+    for (var d=0; d<shape.length; d++){
+      far.push({x: clamp(shape[d][0] + b[0]*0.38, -HALF+1, HALF-1),
+                y: clamp(b[1] + shape[d][1], 2, PL-1), t:'d'});
+    }
+    far.push({x: clamp(b[0]*0.15,-6,6), y: 103.5, t:'d'});
+    for (var a=0; a<ATK.length; a++){
+      var pos = track(ATK[a], p);
+      far.push({x:pos[0], y:pos[1], t:'a'});
+    }
+    far.sort(function(m,n){ return n.y - m.y; });
+    for (var k=0;k<far.length;k++){
+      var o = far[k];
+      if (o.t === 'd') dot(cy, o.x, o.y, 0, 0.62, 'rgba(102,120,138,.80)', null);
+      else dot(cy, o.x, o.y, 0, 0.68, '#E8552F', 'rgba(255,255,255,.55)');
+    }
+
+    /* ball: shadow on the turf, then the ball at height */
+    dot(cy, b[0], b[1], 0, 0.30, 'rgba(22,35,42,.20)', null);
+    dot(cy, b[0], b[1], b[2], 0.42, '#16232A', 'rgba(255,255,255,.85)');
+  }
+
+  var prog = 0, smooth = 0, running = true;
+  function readScroll(){
+    var max = document.documentElement.scrollHeight - innerHeight;
+    prog = max > 0 ? clamp(scrollY/max, 0, 1) : 0;
+  }
+  addEventListener('scroll', readScroll, {passive:true});
+  addEventListener('resize', readScroll);
+  readScroll(); smooth = prog;
+
+  function frame(){
+    if (!running) return;
+    requestAnimationFrame(frame);
+    smooth += (prog - smooth) * 0.09;
+    render(smooth);
+  }
+  document.addEventListener('visibilitychange', function(){
+    if (document.hidden) running = false;
+    else if (!running){ running = true; requestAnimationFrame(frame); }
+  });
+
+  cv.classList.add('ready');
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

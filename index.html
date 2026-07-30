@@ -292,3 +292,124 @@ footer{padding:26px var(--gut) 38px;border-top:1px solid var(--line);display:fle
       </article>
     </div>
   </section>
+
+  <section id="projects" class="wrap">
+    <h2 class="rv">Projects</h2><div class="rule rv"></div>
+    <div class="grid">
+
+      <article class="tile card rv" data-d="1">
+        <p class="when">Jul 2026 &middot; HCLTech &times; UBC hackathon</p>
+        <h3>CodeIQ &mdash; codebase knowledge graph</h3>
+        <p class="desc">Parses a 100K-line React Native codebase into a queryable knowledge graph,
+          then answers plain-English questions about structure and impact. Confidence is scored
+          deterministically from retrieval relevance rather than self-reported by the model.</p>
+        <p class="why"><b>why</b>Every unfamiliar codebase starts with two hours of &#8220;wait, who calls this?&#8221; We wanted that down to one question.</p>
+        <div class="tags"><i>ts-morph</i><i>NetworkX</i><i>ChromaDB</i><i>LangChain</i><i>Groq</i><i>Shiny</i></div>
+        <span class="metric"><b>28/30</b> on the benchmark set, zero errors</span>
+        <div class="pills">
+          <a class="pill" href="https://github.com/goudmani/codeiq_source_code_knowledge_graph" target="_blank" rel="noopener">GitHub</a>
+          <a class="pill" href="https://codeiq-source-code-knowledge-graph-latest.onrender.com/" target="_blank" rel="noopener">Live app</a>
+        </div>
+      </article>
+
+      <article class="tile card rv" data-d="2">
+        <p class="when">2026 &middot; Python package</p>
+        <h3>geospatial-toolkit</h3>
+        <p class="desc">A lightweight package standardising the geospatial operations people
+          rewrite by hand &mdash; coordinate formats, great-circle distance, point-in-polygon city
+          lookup, and antipode calculation with reverse geocoding, which nothing else offers in
+          one call.</p>
+        <p class="why"><b>why</b>Half the cohort was rewriting the same distance function. We packaged it so the other half wouldn&#8217;t have to.</p>
+        <div class="tags"><i>Python</i><i>GeoPandas</i><i>pytest</i><i>quartodoc</i><i>TestPyPI</i></div>
+        <span class="metric"><b>v3.0.0</b> tested, documented, published to TestPyPI</span>
+        <div class="pills">
+          <a class="pill" href="https://github.com/UBC-MDS/geospatial-toolkit" target="_blank" rel="noopener">GitHub</a>
+          <a class="pill" href="https://ubc-mds.github.io/geospatial-toolkit/" target="_blank" rel="noopener">Docs</a>
+        </div>
+      </article>
+
+      <article class="tile card rv" data-d="3">
+        <p class="when">Apr 2026 &middot; Retrieval system</p>
+        <h3>Smart product review search</h3>
+        <p class="desc">Hybrid retrieval over Amazon software reviews &mdash; BM25 and dense
+          embeddings fused with reciprocal rank fusion, then an LLM that has to cite the review it
+          used. Benchmarked against a faster model and kept the slower one, because it admitted
+          retrieval gaps instead of over-committing.</p>
+        <p class="why"><b>why</b>16,000 reviews and no way to ask them anything. Now it either shows its receipts or keeps quiet.</p>
+        <div class="tags"><i>BM25</i><i>FAISS</i><i>RRF</i><i>Groq</i><i>Tavily</i><i>Streamlit</i></div>
+        <span class="metric"><b>15,972</b> reviews indexed and source-cited</span>
+        <div class="pills">
+          <a class="pill" href="https://github.com/codingwithAthul/Information_Rag_Retrieval_Project" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </article>
+
+      <article class="tile card rv" data-d="4">
+        <p class="when">2026 &middot; Deployed dashboard</p>
+        <h3>Vancouver Park Finder</h3>
+        <p class="desc">A public dashboard for searching Vancouver parks against whatever a person
+          actually cares about &mdash; washrooms, dog areas, playgrounds, distance from home.</p>
+        <p class="why"><b>why</b>248 parks in this city and no simple way to ask which one has a washroom and lets the dog off the leash.</p>
+        <div class="tags"><i>Python</i><i>Dash</i><i>Plotly</i><i>Altair</i></div>
+        <span class="metric"><b>248</b> parks, filterable in one screen</span>
+        <div class="pills">
+          <a class="pill" href="https://github.com/UBC-MDS/DSCI-532_2026_3_vancouver_park_dashboard" target="_blank" rel="noopener">GitHub</a>
+          <a class="pill" href="https://019c91e8-5952-d69b-140e-530221568f2d.share.connect.posit.cloud/" target="_blank" rel="noopener">Live app</a>
+        </div>
+      </article>
+
+      <article class="tile card rv" data-d="5">
+        <p class="when">2026 &middot; Cloud deployment</p>
+        <h3>Rainfall prediction API</h3>
+        <p class="desc">A model trained on an EMR/Spark cluster, packaged behind FastAPI and served
+          from a t3a.micro EC2 instance. Loaded once at import rather than per request, with
+          Pydantic-validated payloads and cross-testing against a classmate&#8217;s endpoint.</p>
+        <p class="why"><b>why</b>A model sitting in a .joblib file has never helped anybody. This one at least answers the phone.</p>
+        <div class="tags"><i>AWS EC2</i><i>EMR</i><i>Spark</i><i>FastAPI</i><i>Pydantic</i></div>
+        <div class="pills">
+          <a class="pill" href="https://github.com/codingwithAthul/rainfall-prediction-aws-deployment" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </article>
+
+      <article class="tile card rv" data-d="6">
+        <p class="when">2026 &middot; Reproducible ML</p>
+        <h3>Hotel cancellation prediction</h3>
+        <p class="desc">A classification study on hotel booking cancellations, built so a stranger
+          could re-run it: pinned environment, containerised, scripted data flow, and a report that
+          regenerates from source.</p>
+        <p class="why"><b>why</b>Ran it, got a number, couldn&#8217;t reproduce the number a week later. Built this so that stops happening.</p>
+        <div class="tags"><i>Python</i><i>scikit-learn</i><i>Docker</i><i>Quarto</i></div>
+        <div class="pills">
+          <a class="pill" href="https://github.com/ahass9/DSCI-522-Group-Project" target="_blank" rel="noopener">GitHub</a>
+          <a class="pill" href="https://ahass9.github.io/DSCI-522-Group-Project/reports/hotel_cancellation_classification_analysis.html" target="_blank" rel="noopener">Report</a>
+        </div>
+      </article>
+    </div>
+
+    <p class="sub rv">Built because I wanted to</p>
+    <div class="grid">
+      <article class="tile card rv" data-d="1">
+        <p class="when">Jan 2026 &middot; Writing</p>
+        <h3>Multi-armed bandits, explained</h3>
+        <p class="desc">A written walkthrough of the explore-versus-exploit problem and why A/B
+          testing is often the wrong tool for the job it gets used for.</p>
+        <p class="why"><b>why</b>Slot machines have taught statisticians more than statisticians have taught slot machines. Wrote it down before I forgot why.</p>
+        <div class="tags"><i>Writing</i><i>Bandits</i><i>Experimentation</i></div>
+        <div class="pills">
+          <a class="pill" href="https://github.com/codingwithAthul/Multi-Armed-Bandits" target="_blank" rel="noopener">GitHub</a>
+          <a class="pill" href="https://codingwithathul.github.io/Multi-Armed-Bandits/" target="_blank" rel="noopener">Read it</a>
+        </div>
+      </article>
+
+      <article class="tile card rv" data-d="2">
+        <p class="when">Apr 2026 &middot; Tooling</p>
+        <h3>NotebookLM on Claude Code</h3>
+        <p class="desc">An integration bridging Google NotebookLM into Claude Code, with automated
+          version management, API safety checks and rollback when a change misbehaves.</p>
+        <p class="why"><b>why</b>Two tools I use constantly that refused to speak to each other. Now they do, and there&#8217;s an undo button.</p>
+        <div class="tags"><i>Python</i><i>APIs</i><i>Automation</i></div>
+        <div class="pills">
+          <a class="pill" href="https://github.com/codingwithAthul/Notebooklm-on-Claude" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </article>
+    </div>
+  </section>

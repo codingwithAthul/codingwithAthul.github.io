@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Athul Sasidharan — Data Scientist, Vancouver</title>
+<meta name="description" content="Data scientist in Vancouver. UBC Master of Data Science 2026. Data pipelines at Axis Bank, clinical data at BC Children's Hospital, retrieval systems, dashboards and packages.">
+<meta property="og:title" content="Athul Sasidharan — Data Scientist">
+<meta property="og:description" content="Pipelines, audits and retrieval systems. UBC MDS 2026, Vancouver BC.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ground:#F4F2ED;
+  --ink:#16232A;
+  --ink-soft:#54646E;
+  --line:rgba(22,35,42,.14);
+  --line-2:rgba(22,35,42,.26);
+  --attack:#E8552F;
+  --defend:#66788A;
+  --link:#2E7FA6;
+  --gold:#F2B441;
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --body:"Instrument Sans",ui-sans-serif,system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+  --gut:clamp(20px,5vw,72px);
+  --maxw:1180px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);
+  font-size:clamp(15px,1.05vw,17px);line-height:1.62;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+img{max-width:100%;display:block}
+
+#pitch{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:0;transition:opacity 1s ease .2s}
+#pitch.ready{opacity:1}
+
+/* ---------- nav ---------- */
+header.nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;
+  justify-content:space-between;padding:16px var(--gut);
+  background:linear-gradient(180deg,rgba(244,242,237,.9),rgba(244,242,237,0))}
+.mark{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;text-decoration:none}
+.mark b{color:var(--attack)}
+.nav ul{display:flex;gap:20px;list-style:none;margin:0;padding:0;
+  font-family:var(--mono);font-size:11px;letter-spacing:.11em;text-transform:uppercase}
+.nav a{text-decoration:none;color:var(--ink-soft);transition:color .2s}
+.nav a:hover,.nav a:focus-visible{color:var(--attack)}
+
+/* ---------- layout ---------- */
+main{position:relative;z-index:1}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--gut)}
+section{padding:clamp(72px,11vh,150px) 0}
+
+/* section label: one word, thin rule beneath. Nothing else. */
+h2{font-family:var(--display);font-size:clamp(30px,4.6vw,58px);
+  font-variation-settings:"wdth" 96,"wght" 620;line-height:1;letter-spacing:-.025em;
+  margin:0 0 14px;color:var(--ink)}
+.rule{width:56px;height:2px;background:var(--gold);margin:0 0 clamp(30px,4vh,52px);border-radius:2px}
+
+h1{font-family:var(--display);font-size:clamp(48px,10vw,142px);
+  font-variation-settings:"wdth" 100,"wght" 650;line-height:.88;letter-spacing:-.035em;
+  margin:0 0 24px;text-wrap:balance}
+h3{font-family:var(--display);font-variation-settings:"wdth" 92,"wght" 620;
+  font-size:clamp(18px,1.45vw,22px);line-height:1.2;letter-spacing:-.015em;margin:0}
+p{margin:0 0 14px}
+
+/* ---------- hero ---------- */
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;
+  padding-bottom:clamp(56px,9vh,110px);padding-top:120px}
+.hero-top{display:flex;align-items:flex-end;gap:clamp(20px,3vw,44px);flex-wrap:wrap}
+.shot{width:clamp(96px,10vw,132px);height:clamp(96px,10vw,132px);border-radius:50%;
+  object-fit:cover;border:1px solid var(--line-2);flex:none}
+.about{font-size:clamp(16px,1.4vw,21px);line-height:1.55;color:var(--ink-soft);max-width:60ch;margin:0 0 30px}
+.cta-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-family:var(--mono);
+  font-size:12px;letter-spacing:.05em;padding:12px 19px;border-radius:2px;border:1px solid var(--line-2);
+  background:transparent;color:var(--ink);
+  transition:transform .22s cubic-bezier(.2,.8,.2,1),background .22s,color .22s,border-color .22s}
+.btn:hover,.btn:focus-visible{border-color:var(--ink);transform:translateY(-2px)}
+.btn-solid{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.btn-solid:hover,.btn-solid:focus-visible{background:var(--attack);border-color:var(--attack)}
+.meta{display:flex;flex-wrap:wrap;gap:6px 22px;margin:0 0 26px;font-family:var(--mono);
+  font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+
+/* ---------- transparent tiles ---------- */
+.tile{background:transparent;border:1px solid var(--line);border-radius:3px;
+  transition:border-color .3s,transform .3s cubic-bezier(.2,.8,.2,1)}
+.tile:hover{border-color:var(--line-2);transform:translateY(-2px)}
+
+.edu{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.edu .tile{padding:20px 22px;display:flex;flex-direction:column;gap:6px}
+.edu .when{font-family:var(--mono);font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-soft)}
+.edu a{color:inherit;text-decoration:none;border-bottom:1px solid var(--line-2);transition:border-color .2s,color .2s}
+.edu a:hover,.edu a:focus-visible{color:var(--attack);border-color:var(--attack)}
+.edu .school{font-family:var(--mono);font-size:11.5px;letter-spacing:.03em;color:var(--ink-soft)}
+

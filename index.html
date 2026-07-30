@@ -762,3 +762,22 @@ async function buildScene(){
 
     renderer.render(scene, camera);
   }
+
+  addEventListener('resize', () => {
+    renderer.setSize(innerWidth, innerHeight, false);
+    camera.aspect = innerWidth / innerHeight;
+    camera.updateProjectionMatrix();
+    if (innerWidth < 820){ running = false; canvas.classList.remove('ready'); fallback.classList.add('on'); }
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden){ running = false; }
+    else if (!running && innerWidth >= 820){ running = true; t0 = performance.now(); requestAnimationFrame(frame); }
+  });
+
+  canvas.classList.add('ready');
+  requestAnimationFrame(frame);
+}
+</script>
+</body>
+</html>

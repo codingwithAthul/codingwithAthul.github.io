@@ -584,3 +584,77 @@ footer{padding:26px var(--gut) 38px;border-top:1px solid var(--line);display:fle
     ctx.fillStyle = fill; ctx.fill();
     if (ring){ ctx.strokeStyle = ring; ctx.lineWidth = 1.2; ctx.stroke(); }
   }
+
+  function render(p){
+    var cy = camY(p);
+    ctx.clearRect(0,0,W,H);
+    drawPitch(cy);
+
+    var b = ballAt(p);
+
+    /* pass map: every completed pass stays on the pitch */
+    for (var i=0;i<KF.length-1;i++){
+      if (p <= KF[i][0]) break;
+      var done = p >= KF[i+1][0];
+      var ex = done ? KF[i+1][1] : b[0], ey = done ? KF[i+1][2] : b[1];
+      line(cy, [[KF[i][1],KF[i][2]],[ex,ey]], done ? 1 : 1.8,
+           done ? 0.16 : 0.0);
+      if (!done){
+        var q0 = proj(KF[i][1],KF[i][2],0,cy), q1 = proj(ex,ey,0,cy);
+        if (q0 && q1){
+          ctx.beginPath(); ctx.moveTo(q0[0],q0[1]); ctx.lineTo(q1[0],q1[1]);
+          ctx.strokeStyle = 'rgba(232,85,47,.55)'; ctx.lineWidth = 1.8; ctx.stroke();
+        }
+      }
+    }
+
+    /* defenders: a block that shifts with the ball and stays goal-side */
+    var shape = [[-22,12],[-8,12],[8,12],[22,12],[-16,4],[0,4],[16,4],[-12,-5],[0,-5],[12,-5]];
+    var far = [];
+    for (var d=0; d<shape.length; d++){
+      far.push({x: clamp(shape[d][0] + b[0]*0.38, -HALF+1, HALF-1),
+                y: clamp(b[1] + shape[d][1], 2, PL-1), t:'d'});
+    }
+    far.push({x: clamp(b[0]*0.15,-6,6), y: 103.5, t:'d'});
+    for (var a=0; a<ATK.length; a++){
+      var pos = track(ATK[a], p);
+      far.push({x:pos[0], y:pos[1], t:'a'});
+    }
+    far.sort(function(m,n){ return n.y - m.y; });
+    for (var k=0;k<far.length;k++){
+      var o = far[k];
+      if (o.t === 'd') dot(cy, o.x, o.y, 0, 0.62, 'rgba(102,120,138,.80)', null);
+      else dot(cy, o.x, o.y, 0, 0.68, '#E8552F', 'rgba(255,255,255,.55)');
+    }
+
+    /* ball: shadow on the turf, then the ball at height */
+    dot(cy, b[0], b[1], 0, 0.30, 'rgba(22,35,42,.20)', null);
+    dot(cy, b[0], b[1], b[2], 0.42, '#16232A', 'rgba(255,255,255,.85)');
+  }
+
+  var prog = 0, smooth = 0, running = true;
+  function readScroll(){
+    var max = document.documentElement.scrollHeight - innerHeight;
+    prog = max > 0 ? clamp(scrollY/max, 0, 1) : 0;
+  }
+  addEventListener('scroll', readScroll, {passive:true});
+  addEventListener('resize', readScroll);
+  readScroll(); smooth = prog;
+
+  function frame(){
+    if (!running) return;
+    requestAnimationFrame(frame);
+    smooth += (prog - smooth) * 0.09;
+    render(smooth);
+  }
+  document.addEventListener('visibilitychange', function(){
+    if (document.hidden) running = false;
+    else if (!running){ running = true; requestAnimationFrame(frame); }
+  });
+
+  cv.classList.add('ready');
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

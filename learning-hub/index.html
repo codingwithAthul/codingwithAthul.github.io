@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Learning Hub — Athul Sasidharan</title>
+<meta name="description" content="Notes on things I'm learning lately — Kubernetes, and more topics as they come.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="hub-nav">
+  <div class="hub-nav-top">
+    <a class="back" href="../index.html">&larr; Back to site</a>
+    <span class="hub-title">Learning<b>.</b>Hub</span>
+  </div>
+  <nav class="topic-tabs" id="topic-tabs" role="tablist" aria-label="Topics"></nav>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <!-- ============ TOPIC: Kubernetes ============ -->
+    <article class="topic-panel" data-topic-id="kubernetes" data-topic-label="Kubernetes">
+
+      <div class="hero-block">
+        <h1>Kubernetes</h1>
+        <p class="tagline">Why Docker alone isn't enough once you have more than one container to babysit, and what Kubernetes actually does about it.</p>
+        <div class="source-card">
+          <div>
+            <b>Source</b>
+            <a href="https://www.youtube.com/watch?v=VRKcW7TWRiM" target="_blank" rel="noopener">Docker vs Kubernetes: The ONLY Video You Need to Understand the Difference</a>
+            <div class="by">Cloud Codes, YouTube</div>
+          </div>
+        </div>
+      </div>
+
+      <section>
+        <h2>The problem Kubernetes solves</h2>
+        <div class="rule"></div>
+        <p>Docker packages an app and its dependencies into a container so it runs the same way everywhere. That's the whole job — build an image, run a container from it. Docker doesn't know or care whether that container is one of 3 or one of 300.</p>
+        <p>In production you're never running one container. You're running many copies of many services, across many machines, and you need something to answer questions Docker was never built to answer:</p>
+        <ul>
+          <li>Which machine should this container run on right now?</li>
+          <li>A container just crashed — who restarts it?</li>
+          <li>Traffic doubled — how do I get 5 more copies running, and how do requests find them?</li>
+          <li>I'm shipping a new version — how do I roll it out without downtime, and roll back if it's broken?</li>
+        </ul>
+        <p>That coordination layer is <b>container orchestration</b>, and Kubernetes (often shortened to <code>k8s</code>) is the dominant tool for it.</p>
+      </section>
+
+      <section>
+        <h2>Docker vs Kubernetes — not actually rivals</h2>
+        <div class="rule"></div>
+        <p>The "vs" in the title is a bit of a hook — they sit at different layers and normally work together: Docker builds and runs the containers; Kubernetes decides where those containers go, keeps them alive, and scales them.</p>
+        <table class="compare">
+          <thead><tr><th>Question</th><th>Docker</th><th>Kubernetes</th></tr></thead>
+          <tbody>
+            <tr><td>Unit of work</td><td>A single container</td><td>A <b>cluster</b> of containers across many machines</td></tr>
+            <tr><td>Scope</td><td>One host</td><td>Many hosts, treated as one pool of resources</td></tr>
+            <tr><td>If a container dies</td><td>Stays dead unless something restarts it</td><td>Detected and automatically restarted</td></tr>
+            <tr><td>Scaling</td><td>Manual — run more <code>docker run</code> commands</td><td>Declarative — change a number, it makes it true</td></tr>
+            <tr><td>Networking between copies</td><td>You wire it up yourself</td><td>Built-in service discovery and load balancing</td></tr>
+          </tbody>
+        </table>
+        <div class="callout">
+          <b>Rule of thumb</b>
+          You still use Docker (or a similar runtime) to build the image. Kubernetes takes that image and decides how many copies run, where, and what happens when things go wrong.
+        </div>
+      </section>
+
+      <section>
+        <h2>Core building blocks</h2>
+        <div class="rule"></div>
+        <p>A handful of objects account for most of what you'll touch day-to-day:</p>
+        <ul>
+          <li><b>Cluster</b> — the whole set of machines Kubernetes manages, split into a <b>control plane</b> (makes decisions) and <b>worker nodes</b> (run the actual workloads).</li>
+          <li><b>Node</b> — one machine (physical or virtual) in the cluster.</li>
+          <li><b>Pod</b> — the smallest deployable unit. Usually one container wrapped with a shared network address and storage; Kubernetes never schedules a bare container, it schedules pods.</li>
+          <li><b>Deployment</b> — a declaration of "I want <em>N</em> copies of this pod running." Kubernetes continuously works to make reality match that declaration — this is what gives you self-healing and easy scaling.</li>
+          <li><b>Service</b> — a stable network address in front of a moving set of pods. Pods get replaced constantly (crashes, rollouts, scaling); the Service is the fixed name/IP everything else talks to.</li>
+          <li><b>Namespace</b> — a way to partition one cluster into logical sub-clusters (e.g. <code>staging</code> vs <code>production</code>).</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>The core loop: declarative, not step-by-step</h2>
+        <div class="rule"></div>
+        <p>You don't tell Kubernetes <em>how</em> to do something — you describe the end state you want (usually in a YAML file) and Kubernetes' control plane continuously reconciles reality toward it.</p>
+        <pre><code># deployment.yaml (trimmed)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+spec:
+  replicas: 3
+  template:
+    spec:
+      containers:
+        - name: web
+          image: my-registry/web:1.4.0</code></pre>
+        <p>Applying that file is a promise, not a one-time action:</p>
+        <pre><code>kubectl apply -f deployment.yaml</code></pre>
+        <p>From then on, if a pod crashes, a node dies, or someone deletes a pod by hand, the control plane notices <code>replicas: 3</code> is no longer true and starts a new pod to fix it — with no human in the loop. That reconciliation loop is the core idea underneath everything Kubernetes does.</p>
+      </section>
+
+      <section>
+        <h2>Key takeaways</h2>
+        <div class="rule"></div>
+        <ul>
+          <li>Docker answers "how do I package and run this one thing." Kubernetes answers "how do I run many of these things, reliably, across many machines."</li>
+          <li>You describe desired state; Kubernetes' job is to keep making that state true.</li>
+          <li>Pods are ephemeral and expected to die — Deployments keep the count right, Services give the world a stable address to reach them at.</li>
+          <li>You reach for Kubernetes once "restart it by hand" and "just SSH in and run another container" stop scaling — not for a single side project on a single box.</li>
+        </ul>
+      </section>
+
+    </article>
+    <!-- ============ /TOPIC: Kubernetes ============ -->
+
+    <!--
+      To add a new topic: duplicate the <article class="topic-panel"> block
+      above, give it a unique data-topic-id and data-topic-label, and fill
+      in its sections. script.js picks it up automatically — no other
+      changes needed.
+    -->
+
+  </div>
+</main>
+
+<footer class="hub-footer">Learning Hub — a detached, self-contained part of this site</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
